@@ -1,0 +1,53 @@
+# Load dependencies
+import = [
+"~/.config/alacritty/themes/dracula.toml",
+]
+
+[shell]
+program = "/bin/zsh"
+#args = ["-l"]
+
+working_directory = "~/Developer/Projects"
+
+live_config_reload = true
+
+#UI
+
+[font]
+size = "16"
+
+[font.normal]
+family = "MonaspiceNe Nerd Font Mono"
+style = "Regular"
+
+[font.bold] 
+family = "MonaspiceNe Nerd Font Mono"
+style = "Bold"
+
+[font.italic] 
+family = "MonaspiceNe Nerd Font Mono"
+style = "Italic"
+
+[font.bold_italic] 
+family = "MonaspiceNe Nerd Font Mono"
+style = "Bold Italic"
+
+[window]
+decorations = "none"
+opacity = 0.8
+blur = true
+startup_mode = "SimpleFullscreen"
+
+[window.dimensions]
+columns = 120
+lines = 40
+
+[window.padding]
+x=8
+y=0
+
+[cursor]
+style = "Beam"
+blinking = "On"
+
+

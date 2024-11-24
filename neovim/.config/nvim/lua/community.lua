@@ -8,9 +8,7 @@ return {
 
   -- Colorschemes
   { import = "astrocommunity.colorscheme.dracula-nvim" },
-  { import = "astrocommunity.colorscheme.tokyonight-nvim" },
-  { import = "astrocommunity.colorscheme.nord-nvim" },
-  { import = "astrocommunity.colorscheme.tokyodark-nvim" },
+  { import = "astrocommunity.colorscheme.catppuccin" },
 
   -- Enhancements
   { import = "astrocommunity.fuzzy-finder.telescope-zoxide" },
@@ -28,7 +26,6 @@ return {
   { import = "astrocommunity.pack.rust" },
   { import = "astrocommunity.pack.python" },
   { import = "astrocommunity.pack.markdown" },
-  { import = "astrocommunity.pack.scala" },
   { import = "astrocommunity.pack.sql" },
   { import = "astrocommunity.pack.typescript" },
   { import = "astrocommunity.pack.tailwindcss" },

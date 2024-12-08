@@ -6,6 +6,7 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export BAT_THEME="Catpuccin Macchiatto"
 export MAMBA_EXE='/opt/homebrew/opt/micromamba/bin/mamba';
 export MAMBA_ROOT_PREFIX='/Users/rahulnakmol/.mamba';
+export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/opt/homebrew/share/zsh-syntax-highlighting/highlighters
 
 # Alias definitions.
 if [ -f ~/.zsh_aliases ]; then
@@ -14,6 +15,7 @@ fi
 
 # Shell Hooks
 eval "$(starship init zsh)" # Initialize Starship prompt
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" # iTerm2 shell integration
 
 # >>> mamba initialize >>>

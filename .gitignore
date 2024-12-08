@@ -1,3 +1,4 @@
 **/*.mdb
 .DS_Store
 **/*.log
+tmux/plugins/*

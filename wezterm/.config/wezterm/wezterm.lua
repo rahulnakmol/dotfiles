@@ -1,11 +1,12 @@
 local wezterm = require "wezterm"
-config = wezterm.config_builder()
+local config = wezterm.config_builder()
 
 config = {
     automatically_reload_config = true,
-    enable_tab_bar = false,
-    window_close_confirmation = "NeverPrompt",
-    window_decorations = "RESIZE",
+    enable_tab_bar = true,
+    window_close_confirmation = "AlwaysPrompt",
+    window_decorations = "INTEGRATED_BUTTONS|RESIZE",
+    use_fancy_tab_bar = true,
     default_cursor_style = "BlinkingBar",
     color_scheme = "Catppuccin Macchiato (Gogh)",
     font = wezterm.font("ZedMono Nerd Font", { weight = "Regular", italic = true }),
@@ -34,14 +35,13 @@ config = {
             opacity = 0.55,
         }
     },
-    window = {
-        padding = {
-            left = 4,
-            right = 4,
-            top = 0,
-            bottom = 0,
-        },
-    }
+    window_padding = {
+        left = 4,
+        right = 4,
+        top = 0,
+        bottom = 0,
+    },
+
 }
 
 return config

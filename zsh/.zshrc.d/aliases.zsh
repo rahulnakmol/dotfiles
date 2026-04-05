@@ -222,5 +222,16 @@ alias dcd='podman compose down'
 alias dcl='podman compose logs -f'
 alias dcps='podman compose ps'
 
+# Aliases for claude code
+alias cc='claude'
+alias ccc='claude -c'                                                                                                   # Continue last conversation
+alias ccp='claude -p'                                                                                                   # Non-interactive print mode
+alias ccr='claude --resume'                                                                                             # Resume a specific session
+alias ccs='claude /status'                                                                                              # Show status
+alias ccm='claude --model'                                                                                              # Use a specific model
+alias cco='claude --model opus'                                                                                         # Use Opus model
+alias ccson='claude --model sonnet'                                                                                     # Use Sonnet model
+alias cch='claude --model haiku'                                                                                        # Use Haiku model
+
 # Aliases for fzf
 alias fzp="fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}' --preview-window=right:70%"

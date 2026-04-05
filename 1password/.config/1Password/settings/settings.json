@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "browsers.extension.enabled": true,
+  "security.autolock.minutes": 60,
+  "security.authenticatedUnlock.enabled": true,
+  "appearance.interfaceDensity": "compact",
+  "security.blockSleepEnabled": true,
+  "security.holdToggleReveal": true,
+  "privacy.checkHibp": true,
+  "developers.experience.enabled": true,
+  "developers.experience.dismissed": true,
+  "developers.cliSharedLockState.enabled": true,
+  "developers.sdkSharedLockState.enabled": true,
+  "sshAgent.storeKeyTitles": true,
+  "sshAgent.storeSshKeyTitlesResponseGiven": true,
+  "sshAgent.enabled": true,
+  "authTags": {
+    "appearance.interfaceDensity": "f0pQbITY4CNMt0U0DapegVAOqdY1ZDFtSvqkOoyKuIc",
+    "browsers.extension.enabled": "JSnsCYrvwArAvbKfAvkcTXoKBYHAwv2AZ7IK6jMe4KE",
+    "developers.cliSharedLockState.enabled": "Pi1bshudpt7EJhcMIl5lz56PYTwtUSbTPQBx62YS3F4",
+    "developers.experience.dismissed": "xQ6IUp7Psp/tAwwUF5wj6Pe1qy0FiZet0QN9d7CsM40",
+    "developers.experience.enabled": "RhVPfAAO/QK+qpnagE9p5fFefEi4xdK75X5kbCsEGqI",
+    "developers.sdkSharedLockState.enabled": "gRTe31niXPDpx+EComSCxCkVMuHK2vTnQSoJW0WCIyo",
+    "privacy.checkHibp": "kBfUODTBXrKeuKHKBKg1I0jlU4wzaL/usA4xJDaCZdQ",
+    "security.authenticatedUnlock.enabled": "ecM3sZFne+Tu6ugk+zyOTV/5CHV/dUK+lRWulu/ild8",
+    "security.autolock.minutes": "xHRM2o1Wqba/Z1t+j8Q9kMOIEtssngB3jO9a1EincQA",
+    "security.blockSleepEnabled": "q0OV/IxcC/AwAWDzMcX4Nlo+zZ5/t8/I+/vgoMOqj1w",
+    "security.holdToggleReveal": "BGf3CuH826+xiCEWgxBpgCS1m9+GQ6/5AxNt2GP3GP0",
+    "sshAgent.enabled": "0PIJyEcBCYcM5qxO83wgBVKTYygU37XyjdYUp2xFaKs",
+    "sshAgent.storeKeyTitles": "ghsTkfXfOUC1VNRUZ2ivX8oKoFBq7qx65C/Iz62DQwE",
+    "sshAgent.storeSshKeyTitlesResponseGiven": "cnP2s8o4in/PbQzWBIkmx47d/z1cVUZO8KDtDLIfRlQ"
+  }
+}

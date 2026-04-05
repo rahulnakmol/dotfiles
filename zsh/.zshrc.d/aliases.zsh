@@ -225,7 +225,9 @@ alias ocsi='opencode import'                                                    
 alias ocml='opencode models'                                                                                             # List available models
 alias ocli='opencode providers login'                                                                                    # Login to provider
 alias ocst='opencode stats'                                                                                              # Show usage statistics
-alias ocp='opencode --pure'                                                                                              # Launch without plugins
+alias ocp='opencode --pure'                                                                              # Launch without plugins
+alias ocum='~/.config/opencode/update-models.sh'                                                                         # Update agent models to latest Zen versions
+alias ocumd='~/.config/opencode/update-models.sh --dry-run'                                                              # Dry-run model update (show changes only)
 
 # Aliases for fzf
 alias fzp="fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}' --preview-window=right:70%"

@@ -40,6 +40,7 @@ unset rcfile
 
 # Shell integrations
 eval "$(starship init zsh)"                                                                                             # Initialize starship prompt
+eval "$(zoxide init --cmd cd zsh)"                                                                                      # Initialize zoxide (overrides cd)
 source <(fzf --zsh)                                                                                                     # Set up fzf key bindings and fuzzy completion
 test -e "${HOME}/.zshrc.local" && source "${HOME}/.zshrc.local"                                                         # Enable local and secure environment variables
 

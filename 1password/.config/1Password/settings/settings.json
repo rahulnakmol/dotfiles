@@ -14,6 +14,7 @@
   "sshAgent.storeKeyTitles": true,
   "sshAgent.storeSshKeyTitlesResponseGiven": true,
   "sshAgent.enabled": true,
+  "sshAgent.commitSigningBannerDismissed": true,
   "authTags": {
     "appearance.interfaceDensity": "f0pQbITY4CNMt0U0DapegVAOqdY1ZDFtSvqkOoyKuIc",
     "browsers.extension.enabled": "JSnsCYrvwArAvbKfAvkcTXoKBYHAwv2AZ7IK6jMe4KE",
@@ -26,6 +27,7 @@
     "security.autolock.minutes": "xHRM2o1Wqba/Z1t+j8Q9kMOIEtssngB3jO9a1EincQA",
     "security.blockSleepEnabled": "q0OV/IxcC/AwAWDzMcX4Nlo+zZ5/t8/I+/vgoMOqj1w",
     "security.holdToggleReveal": "BGf3CuH826+xiCEWgxBpgCS1m9+GQ6/5AxNt2GP3GP0",
+    "sshAgent.commitSigningBannerDismissed": "PoaxvwIDT55Q77o+cKH7aXMHmCwHEQqKNF2VXCzWL9o",
     "sshAgent.enabled": "0PIJyEcBCYcM5qxO83wgBVKTYygU37XyjdYUp2xFaKs",
     "sshAgent.storeKeyTitles": "ghsTkfXfOUC1VNRUZ2ivX8oKoFBq7qx65C/Iz62DQwE",
     "sshAgent.storeSshKeyTitlesResponseGiven": "cnP2s8o4in/PbQzWBIkmx47d/z1cVUZO8KDtDLIfRlQ"

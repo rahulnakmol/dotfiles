@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "command": "bash -c 'if echo \"$TOOL_INPUT\" | grep -q \"nvim/.*\\.lua\"; then stylua --check nvim/.config/nvim 2>&1; fi'"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "command": "bash -c 'if echo \"$TOOL_INPUT\" | grep -qE \"(hosts\\.yml|\\.credentials\\.json|\\.env|id_ed25519|id_rsa|allowed_signers)\"; then echo \"BLOCKED: This file contains credentials or sensitive data. Remove from .gitignore allowlist first.\" >&2; exit 1; fi'"
+      }
+    ]
+  }
+}

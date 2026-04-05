@@ -199,17 +199,18 @@ alias dcl='podman compose logs -f'
 alias dcps='podman compose ps'
 
 # Aliases for claude code
-alias cc='claude'
-alias ccc='claude -c'                                                                                                   # Continue last conversation
-alias ccp='claude -p'                                                                                                   # Non-interactive print mode
-alias ccr='claude --resume'                                                                                             # Resume a specific session
-alias ccs='claude /status'                                                                                              # Show status
-alias ccm='claude --model'                                                                                              # Use a specific model
-alias cco='claude --model opus'                                                                                         # Use Opus model
-alias ccson='claude --model sonnet'                                                                                     # Use Sonnet model
-alias cch='claude --model haiku'                                                                                        # Use Haiku model
-alias cce='claude --permission-mode acceptEdits'                                                                         # Auto-accept all file edits
-alias 'cc!'='claude --dangerously-skip-permissions'                                                                      # Bypass all permission checks
+alias cc='claude'                                                                                                        # Interactive session (Sonnet default)
+alias ccc='claude -c'                                                                                                    # Continue last conversation
+alias ccp='claude -p'                                                                                                    # Non-interactive print mode
+alias ccr='claude --resume'                                                                                              # Resume a specific session
+
+# Claude coding workflows (model + permission mode)
+alias ccs='claude --model sonnet --permission-mode acceptEdits'                                                          # Sonnet — daily coding
+alias cco='claude --model opus --permission-mode acceptEdits'                                                            # Opus — architecture, complex tasks
+alias cch='claude --model haiku'                                                                                         # Haiku — quick answers
+alias ccpl='claude --model opus --permission-mode plan'                                                                  # Opus plan — read-only exploration
+alias 'cc!'='claude --model sonnet --dangerously-skip-permissions'                                                        # Sonnet autopilot — fast agentic
+alias 'cco!'='claude --model opus --dangerously-skip-permissions'                                                        # Opus autopilot — full agentic
 
 # Aliases for opencode (via Zen provider)
 alias oc='opencode'                                                                                                      # Launch TUI

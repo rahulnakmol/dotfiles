@@ -36,3 +36,6 @@ test -e "/usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh" \
 
 test -e "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh" \
 && source "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"                                			# Enable autosuggestions
+
+# opencode
+export PATH=/home/rahulnakmol/.opencode/bin:$PATH

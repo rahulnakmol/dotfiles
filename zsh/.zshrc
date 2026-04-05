@@ -20,7 +20,7 @@ elif [[ -d "$HOME/.rustup/toolchains/stable-${MACHTYPE}-unknown-linux-gnu/bin" ]
 fi
 
 # Source modular configs (00-distro.zsh loads first due to sort order)
-for rcfile in "$HOME"/.zshrc.d/*(N.); do
+for rcfile in "$HOME"/.zshrc.d/*.{zsh,sh}(N.); do
   source "$rcfile"
 done
 unset rcfile

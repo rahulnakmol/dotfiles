@@ -1,6 +1,19 @@
 # ZSH Aliases Reference
 
-All aliases live in `aliases.zsh` and are auto-loaded via `~/.zshrc`. They follow a consistent naming convention: **prefix derived from the tool name** (e.g., `g` for git, `d` for docker, `cc` for claude code).
+Modular config files auto-loaded via `~/.zshrc` in sort order. All aliases follow a consistent naming convention: **prefix derived from the tool name** (e.g., `g` for git, `d` for docker, `cc` for claude code).
+
+## File Structure
+
+| File | Purpose | Loaded |
+|------|---------|--------|
+| `00-distro.zsh` | Detect distro, export `$DOTFILES_DISTRO` and `$DOTFILES_BREW_PREFIX` | Always (first) |
+| `aliases.zsh` | Universal aliases (git, tmux, docker, npm, ssh, editors, AI tools) | Always |
+| `pkg-ubuntu.zsh` | apt + Homebrew aliases | Ubuntu/Debian only |
+| `pkg-fedora.zsh` | dnf aliases | Fedora/RHEL only |
+| `pkg-opensuse.zsh` | zypper aliases | openSUSE only |
+| `catppuccin-fzf-macchiato.sh` | FZF Catppuccin theme colors | Always |
+
+Package manager files self-guard with `[[ "$DOTFILES_DISTRO" == "..." ]] || return 0` so they are no-ops on other distros.
 
 ## Navigation & File Listing
 

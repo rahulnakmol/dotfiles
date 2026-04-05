@@ -10,9 +10,12 @@ Each top-level folder is a stow module that symlinks into `$HOME`. Deploy: `stow
 - `stylua --check nvim/.config/nvim` — lint Lua (two-space indent, 120 cols)
 - `tmux -f tmux/.config/tmux/tmux.conf -L audit new-session -d` ��� smoke-test tmux
 
+## Multi-distro Support
+Targets Ubuntu LTS (apt + Homebrew), Fedora (dnf), and openSUSE Tumbleweed (zypper). `00-distro.zsh` detects the distro and exports `$DOTFILES_DISTRO`. Package manager aliases in `pkg-*.zsh` self-guard and only load on the matching distro. ZSH plugins resolve from Homebrew prefix first, then `/usr/share/`.
+
 ## Conventions
 - **Commits**: conventional format scoped to module — `feat(zsh): add fzf aliases`
-- **Aliases**: grouped by tool in `zsh/.zshrc.d/aliases.zsh`, prefixed by utility (`g` git, `d` docker, `t` tmux, `n` npm, `az` azure)
+- **Aliases**: universal in `aliases.zsh`, distro-specific in `pkg-*.zsh`, prefixed by utility (`g` git, `d` docker, `dn` dnf, `zy` zypper)
 - **Theme**: Catppuccin Macchiato everywhere
 - **CLI tools**: `eza` over ls, `bat` over cat, `fd`/`rg` over find/grep, `zoxide` for cd
 

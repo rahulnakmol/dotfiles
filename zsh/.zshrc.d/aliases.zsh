@@ -45,6 +45,41 @@ alias ac='sudo apt autoclean'
 alias aar='sudo apt autoremove'
 alias apur='sudo apt purge'
 
+# Aliases for dnf
+alias dni='sudo dnf install'
+alias dnu='sudo dnf remove'
+alias dnup='sudo dnf check-update'
+alias dnug='sudo dnf upgrade'
+alias dnuu='sudo dnf upgrade --refresh -y && sudo dnf autoremove -y'
+alias dns='dnf search'
+alias dnl='dnf list installed'
+alias dnls='dnf list installed | rg'
+alias dninf='dnf info'
+alias dnc='sudo dnf clean all'
+alias dnar='sudo dnf autoremove'
+alias dnrp='dnf repolist'
+alias dnh='dnf history'
+alias dnhu='sudo dnf history undo'
+alias dnprov='dnf provides'
+
+# Aliases for zypper
+alias zyi='sudo zypper install'
+alias zyu='sudo zypper remove'
+alias zyup='sudo zypper refresh'
+alias zyug='sudo zypper update'
+alias zyuu='sudo zypper refresh && sudo zypper update -y'
+alias zydup='sudo zypper dist-upgrade'
+alias zys='zypper search'
+alias zyl='zypper packages --installed-only'
+alias zyls='zypper search --installed-only'
+alias zyinf='zypper info'
+alias zyc='sudo zypper clean --all'
+alias zyrp='zypper repos'
+alias zyra='sudo zypper addrepo'
+alias zyrd='sudo zypper removerepo'
+alias zypa='zypper patches'
+alias zyve='zypper verify'
+
 # Aliases for git
 alias gs='git status'
 alias ga='git add'
@@ -232,6 +267,24 @@ alias ccm='claude --model'                                                      
 alias cco='claude --model opus'                                                                                         # Use Opus model
 alias ccson='claude --model sonnet'                                                                                     # Use Sonnet model
 alias cch='claude --model haiku'                                                                                        # Use Haiku model
+alias cce='claude --permission-mode acceptEdits'                                                                         # Auto-accept all file edits
+alias 'cc!'='claude --dangerously-skip-permissions'                                                                      # Bypass all permission checks
+
+# Aliases for opencode (via Zen provider)
+alias oc='opencode'                                                                                                      # Launch TUI
+alias occ='opencode -c'                                                                                                  # Continue last session
+alias ocr='opencode run'                                                                                                 # Headless run (non-interactive)
+alias ocrc='opencode run -c'                                                                                             # Continue last session headless
+alias ocm='opencode -m'                                                                                                  # Launch with specific model
+alias ocw='opencode web'                                                                                                 # Open web interface
+alias ocpr='opencode pr'                                                                                                 # Checkout and review a GitHub PR
+alias ocsl='opencode session list'                                                                                       # List sessions
+alias ocse='opencode export'                                                                                             # Export session as JSON
+alias ocsi='opencode import'                                                                                             # Import session from JSON or share URL
+alias ocml='opencode models'                                                                                             # List available models
+alias ocli='opencode providers login'                                                                                    # Login to provider
+alias ocst='opencode stats'                                                                                              # Show usage statistics
+alias ocp='opencode --pure'                                                                                              # Launch without plugins
 
 # Aliases for fzf
 alias fzp="fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}' --preview-window=right:70%"

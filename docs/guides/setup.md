@@ -6,51 +6,21 @@ Step-by-step guide to deploying this dotfiles repo on a new Linux machine.
 
 ## 1. Install prerequisites
 
-### Core tools (required)
+See [dependencies.md](dependencies.md) for the full list with per-distro install commands. The quick version:
 
 ```bash
 # openSUSE Tumbleweed
-sudo zypper install git stow zsh tmux neovim
+sudo zypper install git stow zsh tmux neovim eza bat fd ripgrep fzf zoxide starship curl jq gh
 
 # Fedora
-sudo dnf install git stow zsh tmux neovim
+sudo dnf install git stow zsh tmux neovim eza bat fd-find ripgrep fzf zoxide starship curl jq gh
 
 # Ubuntu / Debian
-sudo apt install git stow zsh tmux neovim
+sudo apt install git stow zsh tmux curl jq gh
+brew install eza bat fd ripgrep fzf zoxide starship neovim
 ```
-
-### CLI tools
-
-Install these via your package manager or Homebrew:
-
-- `eza` -- modern `ls` replacement
-- `bat` -- syntax-highlighted `cat`
-- `fd` -- fast file finder
-- `ripgrep` -- fast grep (`rg`)
-- `fzf` -- fuzzy finder
-- `zoxide` -- smart `cd`
-- `starship` -- cross-shell prompt
-
-```bash
-# openSUSE (most are in the default repos)
-sudo zypper install eza bat fd ripgrep fzf zoxide starship
-
-# Fedora
-sudo dnf install eza bat fd-find ripgrep fzf zoxide starship
-
-# Ubuntu (Homebrew recommended for latest versions)
-brew install eza bat fd ripgrep fzf zoxide starship
-```
-
-### Font
 
 Install [Mononoki Nerd Font](https://www.nerdfonts.com/font-downloads) and configure your terminal to use it.
-
-### Optional
-
-- [Ghostty](https://ghostty.org) -- GPU-accelerated terminal
-- [1Password](https://1password.com) -- SSH agent and commit signing
-- [Homebrew](https://brew.sh) -- recommended on Ubuntu for dev tool versions
 
 ## 2. Set zsh as default shell
 
@@ -76,7 +46,7 @@ Stow creates symlinks from each module directory into `$HOME`. Deploy in this or
 stow zsh
 
 # Step 2: Core tools
-stow git ssh starship
+stow git ssh starship bat
 
 # Step 3: Terminal and editor
 stow tmux ghostty nvim
@@ -100,7 +70,7 @@ stow -n zsh    # dry-run, shows what symlinks would be created
 To deploy everything at once:
 
 ```bash
-stow zsh git ssh starship tmux ghostty nvim gh claude opencode codex 1password
+stow zsh git ssh starship bat tmux ghostty nvim gh claude opencode codex 1password
 ```
 
 ## 5. Post-install steps

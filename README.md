@@ -27,6 +27,8 @@ Re-run `stow <module>` after pulling changes to keep `$HOME` in sync.
 | Font | [Mononoki Nerd Font](https://www.nerdfonts.com) |
 | Optional | [1Password](https://1password.com) (SSH agent + commit signing), [Homebrew](https://brew.sh) |
 
+Full list with per-distro install commands: [docs/guides/dependencies.md](docs/guides/dependencies.md)
+
 ## Modules
 
 | Module | What it configures | Docs |
@@ -89,6 +91,7 @@ Catppuccin **Macchiato** everywhere: Ghostty, tmux, Starship, Neovim, FZF, and b
 
 ## Docs
 
+- [Dependencies](docs/guides/dependencies.md) — every tool with per-distro install commands
 - [Setup guide](docs/guides/setup.md) — fresh machine walkthrough
 - [Aliases cheatsheet](docs/guides/aliases.md) — every alias grouped by domain
 - [Tmux keybindings](docs/guides/tmux-keybindings.md) — full key reference

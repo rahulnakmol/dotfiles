@@ -53,7 +53,7 @@ Loaded from Homebrew `share/` or system `/usr/share/`:
 
 ## Dependencies
 
-Homebrew (Linux or macOS), starship, zoxide, fzf, eza, bat, zsh plugins (from brew or system packages).
+Homebrew (Linux), starship, zoxide, fzf, eza, bat, zsh plugins (from brew or system packages).
 
 ## Local Overrides
 

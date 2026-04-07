@@ -36,7 +36,7 @@ Package manager files self-guard with `[[ "$DOTFILES_DISTRO" == "..." ]] || retu
 
 ## Package Managers
 
-### Homebrew (`b` prefix) — macOS
+### Homebrew (`b` prefix)
 
 | Alias | Command | Description |
 |-------|---------|-------------|

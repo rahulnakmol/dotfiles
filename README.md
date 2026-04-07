@@ -39,7 +39,7 @@ Full list with per-distro install commands: [docs/guides/dependencies.md](docs/g
 | `starship` | Prompt with Catppuccin palette and Nerd Font glyphs | [details](docs/modules/starship.md) |
 | `git` | User identity, SSH commit signing via 1Password | [details](docs/modules/git.md) |
 | `gh` | GitHub CLI defaults | [details](docs/modules/gh.md) |
-| `ssh` | 1Password SSH agent on macOS and Linux | [details](docs/modules/ssh.md) |
+| `ssh` | 1Password SSH agent on Linux | [details](docs/modules/ssh.md) |
 | `ghostty` | Terminal: Catppuccin theme, Mononoki font, translucent window | [details](docs/modules/ghostty.md) |
 | `bat` | Catppuccin syntax-highlighting themes | [details](docs/modules/bat.md) |
 | `1password` | SSH agent, security settings, compact UI | [details](docs/modules/1password.md) |

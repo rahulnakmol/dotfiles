@@ -1,6 +1,6 @@
 # ssh
 
-SSH client configuration for 1Password agent integration on macOS and Linux.
+SSH client configuration for 1Password agent integration on Linux.
 
 ## Key Files
 
@@ -11,14 +11,11 @@ SSH client configuration for 1Password agent integration on macOS and Linux.
 
 ## Agent Configuration
 
-Uses `Match exec` directives to select the correct 1Password agent socket per OS:
+A single `Host *` block points to the 1Password SSH agent socket:
 
-| Platform | Match condition | Socket Path |
-|----------|----------------|-------------|
-| macOS | `uname \| grep -q Darwin` | `~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock` |
-| Linux | `uname \| grep -q Linux` | `~/.1password/agent.sock` |
-
-Only the matching platform block activates — no fallback guessing.
+| Setting | Value |
+|---------|-------|
+| `IdentityAgent` | `~/.1password/agent.sock` |
 
 ## Allowed Signers
 

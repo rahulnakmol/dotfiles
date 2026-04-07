@@ -20,7 +20,7 @@ Re-run `stow <module>` after pulling changes to keep `$HOME` in sync.
 
 | Category | Tools |
 |----------|-------|
-| Core | `git`, `stow`, `zsh` |
+| Core | `git`, `stow`, `zsh`, `curl`, `jq` |
 | CLI | `eza`, `bat`, `fd`, `ripgrep`, `fzf`, `zoxide` |
 | Terminal | [Ghostty](https://ghostty.org), [tmux](https://github.com/tmux/tmux), [Starship](https://starship.rs) |
 | Editor | [Neovim](https://neovim.io) 0.10+ (LazyVim) |

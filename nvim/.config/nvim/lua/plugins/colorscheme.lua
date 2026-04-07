@@ -1,8 +1,6 @@
 return {
-  -- add gruvbox
-  { "catppuccin/nvim" },
+  { "catppuccin/nvim", name = "catppuccin", opts = { flavour = "macchiato" } },
 
-  -- Configure LazyVim to load gruvbox
   {
     "LazyVim/LazyVim",
     opts = {

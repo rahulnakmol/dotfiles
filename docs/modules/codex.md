@@ -50,7 +50,7 @@ OpenAI Codex CLI configuration with Azure OpenAI backend and multiple profiles.
 
 ## Trusted Projects
 
-`/home/rahulnakmol/.dotfiles`
+`~/.dotfiles`
 
 ## Dependencies
 

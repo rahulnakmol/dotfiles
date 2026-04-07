@@ -11,14 +11,14 @@ SSH client configuration for 1Password agent integration on macOS and Linux.
 
 ## Agent Configuration
 
-Two `Host *` blocks provide 1Password SSH agent support across platforms:
+Uses `Match exec` directives to select the correct 1Password agent socket per OS:
 
-| Platform | Socket Path |
-|----------|-------------|
-| macOS | `~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock` |
-| Linux | `~/.1password/agent.sock` |
+| Platform | Match condition | Socket Path |
+|----------|----------------|-------------|
+| macOS | `uname \| grep -q Darwin` | `~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock` |
+| Linux | `uname \| grep -q Linux` | `~/.1password/agent.sock` |
 
-SSH will try both paths; the one that exists on the current system is used.
+Only the matching platform block activates — no fallback guessing.
 
 ## Allowed Signers
 

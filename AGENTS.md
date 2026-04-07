@@ -3,7 +3,7 @@
 Each top-level folder is a stow module that symlinks into `$HOME`. Deploy: `stow <module>`. Dry-run: `stow -n <module>`.
 
 ## Modules
-`1password` `claude` `codex` `gh` `ghostty` `git` `nvim` `opencode` `ssh` `starship` `tmux` `zsh`
+`1password` `bat` `claude` `codex` `gh` `ghostty` `git` `nvim` `opencode` `ssh` `starship` `tmux` `zsh`
 
 ## Validation
 - `zsh -n zsh/.zshrc` — syntax-check shell

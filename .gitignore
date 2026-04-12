@@ -16,6 +16,13 @@ gh/.config/gh/hosts.yml
 **/.env*
 **/*secret*
 **/*token*
+**/*credential*
+**/*.p12
+**/*.pfx
+**/*.keystore
+**/.netrc
+**/.npmrc
+**/.pypirc
 
 # Codex — ignore everything except config
 codex/.codex/*

@@ -20,11 +20,11 @@ Distro-specific aliases load conditionally based on `$DOTFILES_DISTRO`.
 
 | Alias | Expands to | Description |
 |-------|-----------|-------------|
-| `ls` | `eza -l --color=auto` | Long listing with eza |
-| `l` | `eza -F --color=auto` | Compact listing with type indicators |
+| `ls` | `eza -l --icons=always --color=auto` | Long listing with eza and icons |
+| `l` | `eza -F --icons=always --color=auto` | Compact listing with type indicators |
 | `ll` | `ls -alF --color=auto` | All files, long format |
 | `la` | `ls -A --color=auto` | All files except `.` and `..` |
-| `lar` | `eza -laR --sort changed` | Recursive listing sorted by change time |
+| `lar` | `eza -laR --icons=always --sort changed` | Recursive listing sorted by change time |
 | `cat` | `bat` | Syntax-highlighted file viewer |
 | `catt` | `bat --theme="Catppuccin Macchiato" --style="header,grid,numbers"` | Themed bat with line numbers |
 

@@ -30,7 +30,7 @@ Package manager files self-guard with `[[ "$DOTFILES_DISTRO" == "..." ]] || retu
 
 | Alias | Command | Description |
 |-------|---------|-------------|
-| `ls` | `eza -l` | Long listing (replaces ls) |
+| `ls` | `eza -l --icons=always` | Long listing with icons (replaces ls) |
 | `l` | `eza -F` | Compact listing with indicators |
 | `ll` | `ls -alF` | All files, long format |
 | `la` | `ls -A` | All except `.` and `..` |

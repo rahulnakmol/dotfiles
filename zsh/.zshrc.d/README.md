@@ -8,7 +8,7 @@ Modular config files auto-loaded via `~/.zshrc` in sort order. All aliases follo
 |------|---------|--------|
 | `00-distro.zsh` | Detect distro, export `$DOTFILES_DISTRO`, `$DOTFILES_WSL`, and `$DOTFILES_BREW_PREFIX` | Always (first) |
 | `01-wsl.zsh` | WSL env vars (`$WSL_HOME`), 1Password `op-ssh-sign-wsl` bridge, git signing override | WSL only |
-| `02-wsl-aliases.zsh` | WSL aliases (explorer, clipboard, `prj`/`ghr` overrides to Windows filesystem) | WSL only |
+| `wsl-aliases.zsh` | WSL aliases (explorer, clipboard, `prj`/`ghr` overrides to Windows filesystem) | WSL only |
 | `aliases.zsh` | Universal aliases (git, tmux, docker, npm, ssh, editors, AI tools) | Always |
 | `pkg-ubuntu.zsh` | apt + Homebrew aliases | Ubuntu/Debian only |
 | `pkg-fedora.zsh` | dnf aliases | Fedora/RHEL only |
@@ -34,7 +34,7 @@ Package manager files self-guard with `[[ "$DOTFILES_DISTRO" == "..." ]] || retu
 | `l` | `eza -F` | Compact listing with indicators |
 | `ll` | `ls -alF` | All files, long format |
 | `la` | `ls -A` | All except `.` and `..` |
-| `lar` | `ls -laRt changed` | Recursive, sorted by change time |
+| `lar` | `eza -laR --sort changed` | Recursive, sorted by change time |
 
 ## Package Managers
 
@@ -322,13 +322,12 @@ Podman is used as a drop-in replacement for Docker. `docker` itself is aliased t
 | `ccc` | `claude -c` | Continue last conversation |
 | `ccp` | `claude -p` | Non-interactive print mode |
 | `ccr` | `claude --resume` | Resume specific session |
-| `ccs` | `claude /status` | Show status |
-| `ccm` | `claude --model` | Use specific model |
-| `cco` | `claude --model opus` | Use Opus |
-| `ccson` | `claude --model sonnet` | Use Sonnet |
-| `cch` | `claude --model haiku` | Use Haiku |
-| `cce` | `claude --permission-mode acceptEdits` | Auto-accept file edits |
-| `cc!` | `claude --dangerously-skip-permissions` | Bypass all permissions |
+| `ccs` | `claude --model sonnet --permission-mode acceptEdits` | Sonnet — daily coding |
+| `cco` | `claude --model opus --permission-mode acceptEdits` | Opus — complex tasks |
+| `cch` | `claude --model haiku` | Haiku — quick answers |
+| `ccpl` | `claude --model opus --permission-mode plan` | Opus plan — read-only |
+| `cc!` | `claude --model sonnet --dangerously-skip-permissions` | Sonnet autopilot |
+| `cco!` | `claude --model opus --dangerously-skip-permissions` | Opus autopilot |
 
 ## OpenCode (`oc` prefix)
 

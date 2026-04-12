@@ -24,7 +24,7 @@ Distro-specific aliases load conditionally based on `$DOTFILES_DISTRO`.
 | `l` | `eza -F --color=auto` | Compact listing with type indicators |
 | `ll` | `ls -alF --color=auto` | All files, long format |
 | `la` | `ls -A --color=auto` | All files except `.` and `..` |
-| `lar` | `ls -laRt changed` | Recursive listing sorted by change time |
+| `lar` | `eza -laR --sort changed` | Recursive listing sorted by change time |
 | `cat` | `bat` | Syntax-highlighted file viewer |
 | `catt` | `bat --theme="Catppuccin Macchiato" --style="header,grid,numbers"` | Themed bat with line numbers |
 

@@ -84,7 +84,7 @@ Full reference: [docs/guides/tmux-keybindings.md](docs/guides/tmux-keybindings.m
 
 ## Multi-distro support
 
-The file `zsh/.zshrc.d/00-distro.zsh` detects the running distro and exports `$DOTFILES_DISTRO`. It also detects WSL and exports `$DOTFILES_WSL`. Distro-specific alias files (`pkg-ubuntu.zsh`, `pkg-fedora.zsh`, `pkg-opensuse.zsh`) and WSL-specific files (`01-wsl.zsh`, `02-wsl-aliases.zsh`) self-guard — they return immediately on the wrong environment.
+The file `zsh/.zshrc.d/00-distro.zsh` detects the running distro and exports `$DOTFILES_DISTRO`. It also detects WSL and exports `$DOTFILES_WSL`. Distro-specific alias files (`pkg-ubuntu.zsh`, `pkg-fedora.zsh`, `pkg-opensuse.zsh`) and WSL-specific files (`01-wsl.zsh`, `wsl-aliases.zsh`) self-guard — they return immediately on the wrong environment.
 
 ## Theme
 

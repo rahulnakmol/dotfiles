@@ -124,7 +124,6 @@ config.keys = {
   },
   {
     key = "F11",
-    mods = "CTRL",
     action = wezterm.action.ToggleFullScreen,
   },
 
@@ -161,7 +160,7 @@ config.keys = {
     key = "a",
     mods = "CTRL|SHIFT",
     action = wezterm.action.SpawnCommandInNewTab({
-      domain_name = "WSL:Ubuntu",
+      domain = { DomainName = "WSL:Ubuntu" },
       args = { "claude", "--model", "opus", "--dangerously-skip-permissions" },
     }),
   },
@@ -171,7 +170,7 @@ config.keys = {
     key = "p",
     mods = "CTRL|SHIFT",
     action = wezterm.action.SpawnCommandInNewTab({
-      domain_name = "WSL:Ubuntu",
+      domain = { DomainName = "WSL:Ubuntu" },
       args = { "claude", "--model", "opus", "--permission-mode", "plan" },
     }),
   },
@@ -181,7 +180,7 @@ config.keys = {
     key = "s",
     mods = "CTRL|SHIFT",
     action = wezterm.action.SpawnCommandInNewTab({
-      domain_name = "WSL:Ubuntu",
+      domain = { DomainName = "WSL:Ubuntu" },
       args = { "claude", "--model", "sonnet", "--permission-mode", "acceptEdits" },
     }),
   },

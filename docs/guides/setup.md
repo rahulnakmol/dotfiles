@@ -191,7 +191,7 @@ stow zsh tmux git   # re-stow any modules that changed
 
 Stow is idempotent -- re-running it on an already-deployed module is safe.
 
-## 8. Local overrides
+## 9. Local overrides
 
 For machine-specific config that should not be committed:
 

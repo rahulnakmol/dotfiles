@@ -8,10 +8,10 @@ Each top-level folder is a stow module that symlinks into `$HOME`. Deploy: `stow
 ## Validation
 - `zsh -n zsh/.zshrc` — syntax-check shell
 - `stylua --check nvim/.config/nvim` — lint Lua (two-space indent, 120 cols)
-- `tmux -f tmux/.config/tmux/tmux.conf -L audit new-session -d` ��� smoke-test tmux
+- `tmux -f tmux/.config/tmux/tmux.conf -L audit new-session -d` — smoke-test tmux
 
 ## Multi-distro Support
-Targets Ubuntu LTS (apt + Homebrew), Fedora (dnf), openSUSE Tumbleweed (zypper), and **WSL** (Ubuntu + Homebrew). `00-distro.zsh` detects the distro (`$DOTFILES_DISTRO`) and WSL (`$DOTFILES_WSL`). Package manager aliases in `pkg-*.zsh` and WSL-specific files (`01-wsl.zsh`, `02-wsl-aliases.zsh`) self-guard and only load on the matching environment. On WSL, 1Password SSH signing uses the Windows `op-ssh-sign-wsl` relay. ZSH plugins resolve from Homebrew prefix first, then `/usr/share/`.
+Targets Ubuntu LTS (apt + Homebrew), Fedora (dnf), openSUSE Tumbleweed (zypper), and **WSL** (Ubuntu + Homebrew). `00-distro.zsh` detects the distro (`$DOTFILES_DISTRO`) and WSL (`$DOTFILES_WSL`). Package manager aliases in `pkg-*.zsh` and WSL-specific files (`01-wsl.zsh`, `wsl-aliases.zsh`) self-guard and only load on the matching environment. On WSL, 1Password SSH signing uses the Windows `op-ssh-sign-wsl` relay. ZSH plugins resolve from Homebrew prefix first, then `/usr/share/`.
 
 ## Conventions
 - **Commits**: conventional format scoped to module — `feat(zsh): add fzf aliases`

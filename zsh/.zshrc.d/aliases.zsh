@@ -1,5 +1,4 @@
-# Enable color support for ls and other utilities
-alias ls='ls --color=auto'
+# Enable color support
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
 alias grep='grep --color=auto'
@@ -19,7 +18,7 @@ alias ls='eza -l --color=auto'
 alias l='eza -F --color=auto'
 alias ll='ls -alF --color=auto'
 alias la='ls -A --color=auto'
-alias lar='ls -laRt changed'
+alias lar='eza -laR --sort changed'
 
 # Aliases for git
 alias gs='git status'

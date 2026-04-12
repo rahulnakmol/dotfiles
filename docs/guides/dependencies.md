@@ -41,6 +41,8 @@ brew install eza bat fd ripgrep fzf zoxide starship neovim
 
 > **Note:** On Ubuntu, `neovim` from apt is often too old for LazyVim. Homebrew or the Neovim PPA is recommended.
 
+> **WSL note:** On WSL (Ubuntu), follow the same Ubuntu/Debian install commands. Homebrew is the primary package manager for dev tools. Use WezTerm on the Windows side instead of Ghostty. 1Password SSH signing works via the Windows agent relay — no separate Linux install needed.
+
 ---
 
 ## Tier 2 — Recommended

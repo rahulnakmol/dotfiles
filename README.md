@@ -2,7 +2,7 @@
 
 Linux dotfiles themed around **Catppuccin Macchiato**. Each top-level directory is a [GNU Stow](https://www.gnu.org/software/stow/) module that symlinks into `$HOME`.
 
-Multi-distro: Ubuntu/Debian, Fedora, and openSUSE Tumbleweed.
+Multi-distro: Ubuntu/Debian, Fedora, openSUSE Tumbleweed, and **WSL** (Ubuntu + Homebrew).
 
 ## Quick start
 
@@ -22,7 +22,7 @@ Re-run `stow <module>` after pulling changes to keep `$HOME` in sync.
 |----------|-------|
 | Core | `git`, `stow`, `zsh`, `curl`, `jq` |
 | CLI | `eza`, `bat`, `fd`, `ripgrep`, `fzf`, `zoxide` |
-| Terminal | [Ghostty](https://ghostty.org), [tmux](https://github.com/tmux/tmux), [Starship](https://starship.rs) |
+| Terminal | [Ghostty](https://ghostty.org) (Linux), [WezTerm](https://wezfurlong.org/wezterm/) (WSL), [tmux](https://github.com/tmux/tmux), [Starship](https://starship.rs) |
 | Editor | [Neovim](https://neovim.io) 0.10+ (LazyVim) |
 | Font | [Mononoki Nerd Font](https://www.nerdfonts.com) |
 | Optional | [1Password](https://1password.com) (SSH agent + commit signing), [Homebrew](https://brew.sh) |
@@ -41,6 +41,7 @@ Full list with per-distro install commands: [docs/guides/dependencies.md](docs/g
 | `gh` | GitHub CLI defaults | [details](docs/modules/gh.md) |
 | `ssh` | 1Password SSH agent on Linux | [details](docs/modules/ssh.md) |
 | `ghostty` | Terminal: Catppuccin theme, Mononoki font, translucent window | [details](docs/modules/ghostty.md) |
+| `wezterm` | WSL terminal: Catppuccin theme, agentic coding keybindings | [details](docs/modules/wezterm.md) |
 | `bat` | Catppuccin syntax-highlighting themes | [details](docs/modules/bat.md) |
 | `1password` | SSH agent, security settings, compact UI | [details](docs/modules/1password.md) |
 | `claude` | Claude Code settings, 31 plugins, custom statusline | [details](docs/modules/claude.md) |
@@ -83,11 +84,11 @@ Full reference: [docs/guides/tmux-keybindings.md](docs/guides/tmux-keybindings.m
 
 ## Multi-distro support
 
-The file `zsh/.zshrc.d/00-distro.zsh` detects the running distro and exports `$DOTFILES_DISTRO`. Distro-specific alias files (`pkg-ubuntu.zsh`, `pkg-fedora.zsh`, `pkg-opensuse.zsh`) self-guard — they return immediately on the wrong distro.
+The file `zsh/.zshrc.d/00-distro.zsh` detects the running distro and exports `$DOTFILES_DISTRO`. It also detects WSL and exports `$DOTFILES_WSL`. Distro-specific alias files (`pkg-ubuntu.zsh`, `pkg-fedora.zsh`, `pkg-opensuse.zsh`) and WSL-specific files (`01-wsl.zsh`, `02-wsl-aliases.zsh`) self-guard — they return immediately on the wrong environment.
 
 ## Theme
 
-Catppuccin **Macchiato** everywhere: Ghostty, tmux, Starship, Neovim, FZF, and bat.
+Catppuccin **Macchiato** everywhere: Ghostty, WezTerm, tmux, Starship, Neovim, FZF, and bat.
 
 ## Docs
 

@@ -6,7 +6,9 @@ Modular config files auto-loaded via `~/.zshrc` in sort order. All aliases follo
 
 | File | Purpose | Loaded |
 |------|---------|--------|
-| `00-distro.zsh` | Detect distro, export `$DOTFILES_DISTRO` and `$DOTFILES_BREW_PREFIX` | Always (first) |
+| `00-distro.zsh` | Detect distro, export `$DOTFILES_DISTRO`, `$DOTFILES_WSL`, and `$DOTFILES_BREW_PREFIX` | Always (first) |
+| `01-wsl.zsh` | WSL env vars (`$WSL_HOME`), 1Password `op-ssh-sign-wsl` bridge, git signing override | WSL only |
+| `02-wsl-aliases.zsh` | WSL aliases (explorer, clipboard, `prj`/`ghr` overrides to Windows filesystem) | WSL only |
 | `aliases.zsh` | Universal aliases (git, tmux, docker, npm, ssh, editors, AI tools) | Always |
 | `pkg-ubuntu.zsh` | apt + Homebrew aliases | Ubuntu/Debian only |
 | `pkg-fedora.zsh` | dnf aliases | Fedora/RHEL only |

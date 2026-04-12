@@ -17,6 +17,7 @@ gh/.config/gh/hosts.yml
 **/*secret*
 **/*token*
 **/*credential*
+!git/.config/git/config-credential
 **/*.p12
 **/*.pfx
 **/*.keystore

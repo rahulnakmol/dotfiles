@@ -15,3 +15,7 @@
 
 [tag]
 	gpgsign = true
+
+# HTTPS credential helper (always loaded — harmless when using SSH)
+[include]
+	path = ~/.config/git/config-credential

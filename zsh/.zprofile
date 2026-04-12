@@ -1,6 +1,11 @@
 # .zprofile — runs once on login shell only
 # Interactive shell setup (prompt, aliases, plugins) belongs in .zshrc
 
+# WSL detection (also set in 00-distro.zsh for non-login shells)
+if [[ -n "$WSL_DISTRO_NAME" ]] || grep -qi microsoft /proc/version 2>/dev/null; then
+  export DOTFILES_WSL=1
+fi
+
 # Environment variables (set once per session)
 export CLICOLOR=1
 export GOPATH="$HOME/Developer/go"

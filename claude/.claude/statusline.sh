@@ -1,126 +1,112 @@
-#!/bin/bash
-# Catppuccin Macchiato status line for Claude Code
+#!/usr/bin/env bash
+# Claude Code statusline — Catppuccin Macchiato palette
+# Called by settings.json → statusLine.command
 
-# Color palette
-MAUVE="\033[38;2;198;160;246m"
-PEACH="\033[38;2;245;169;127m"
-GREEN="\033[38;2;166;218;149m"
-RED="\033[38;2;237;135;150m"
-BLUE="\033[38;2;138;173;244m"
-LAVENDER="\033[38;2;183;189;248m"
-TEXT="\033[38;2;202;211;245m"
-SUBTEXT1="\033[38;2;184;192;224m"
-RESET="\033[0m"
+set -euo pipefail
 
-# Read JSON input
-input=$(cat)
+# ── Catppuccin Macchiato ANSI 24-bit colors ──────────────────────────────────
+C_RESET=$'\033[0m'
+C_MAUVE=$'\033[38;2;198;160;246m'
+C_PEACH=$'\033[38;2;245;169;127m'
+C_GREEN=$'\033[38;2;166;218;149m'
+C_RED=$'\033[38;2;237;135;150m'
+C_BLUE=$'\033[38;2;138;173;244m'
+C_LAVENDER=$'\033[38;2;183;189;248m'
+C_TEXT=$'\033[38;2;202;211;245m'
+C_SUBTEXT=$'\033[38;2;184;192;224m'
+C_SURFACE=$'\033[38;2;91;96;120m'
 
-# Extract data from JSON
-model_id=$(echo "$input" | jq -r '.model.id // ""')
-model_display=$(echo "$input" | jq -r '.model.display_name // "Claude"')
+# ── Read JSON from stdin ─────────────────────────────────────────────────────
+json=$(cat)
 
-# Extract version from model ID (e.g., "claude-opus-4-6" -> "opus-4-6")
-if [ -n "$model_id" ] && [ "$model_id" != "null" ]; then
-    model=$(echo "$model_id" | sed -E 's/^claude-//' | sed -E 's/-([0-9]{8})$//')
+model=$(echo "$json" | jq -r '.model.display_name // .model.id // empty')
+cwd=$(echo "$json" | jq -r '.workspace.current_dir // .cwd // empty')
+vim_mode=$(echo "$json" | jq -r '.vim.mode // empty')
+tokens_in=$(echo "$json" | jq -r '.context_window.total_input_tokens // 0')
+tokens_out=$(echo "$json" | jq -r '.context_window.total_output_tokens // 0')
+tokens_used=$(( tokens_in + tokens_out ))
+tokens_max=$(echo "$json" | jq -r '.context_window.context_window_size // 0')
+
+# ── Format model ─────────────────────────────────────────────────────────────
+if [[ -n "$model" ]]; then
+  model_str="${C_MAUVE}${model}${C_RESET}"
 else
-    model="$model_display"
+  model_str="${C_SURFACE}--${C_RESET}"
 fi
 
-cwd=$(echo "$input" | jq -r '.workspace.current_dir // "~"')
-session_name=$(echo "$input" | jq -r '.session_name // empty')
-vim_mode=$(echo "$input" | jq -r '.vim.mode // empty')
-remaining=$(echo "$input" | jq -r '.context_window.remaining_percentage // empty')
-tokens_used=$(echo "$input" | jq -r '.context_window.used // empty')
-tokens_total=$(echo "$input" | jq -r '.context_window.total // empty')
-
-# Format tokens as "25k/200K"
-format_tokens() {
-    local num=$1
-    if [ -z "$num" ] || [ "$num" = "null" ]; then
-        echo ""
-        return
-    fi
-    if [ "$num" -ge 1000000 ]; then
-        printf "%.1fM" "$(echo "scale=1; $num / 1000000" | bc)"
-    elif [ "$num" -ge 1000 ]; then
-        printf "%.0fk" "$(echo "scale=0; $num / 1000" | bc)"
-    else
-        echo "$num"
-    fi
-}
-
-# Format directory (basename if too long)
-if [ ${#cwd} -gt 40 ]; then
-    display_dir=$(basename "$cwd")
+# ── Format directory ─────────────────────────────────────────────────────────
+if [[ -n "$cwd" ]]; then
+  if (( ${#cwd} > 40 )); then
+    cwd="${cwd##*/}"
+  fi
+  dir_str="${C_LAVENDER}${cwd}${C_RESET}"
 else
-    display_dir="$cwd"
+  dir_str=""
 fi
 
-# Git branch detection
-git_branch=""
-if git -C "$cwd" rev-parse --git-dir > /dev/null 2>&1; then
-    branch=$(git -C "$cwd" branch --show-current 2>/dev/null)
-    if [ -n "$branch" ]; then
-        if ! git -C "$cwd" diff --quiet 2>/dev/null || \
-           ! git -C "$cwd" diff --cached --quiet 2>/dev/null; then
-            git_branch="${PEACH}  ${branch}${RESET} ${RED}●${RESET}"
-        else
-            git_branch="${GREEN}  ${branch}${RESET}"
-        fi
-    fi
+# ── Git branch ───────────────────────────────────────────────────────────────
+branch=""
+if command -v git &>/dev/null && [[ -n "$cwd" ]]; then
+  branch=$(git -C "$cwd" rev-parse --abbrev-ref HEAD 2>/dev/null || true)
+fi
+if [[ -n "$branch" ]]; then
+  dirty=$(git -C "$cwd" status --porcelain 2>/dev/null | head -1)
+  if [[ -n "$dirty" ]]; then
+    git_str="${C_PEACH}${branch}·${C_RESET}"
+  else
+    git_str="${C_GREEN}${branch}${C_RESET}"
+  fi
+else
+  git_str=""
 fi
 
-# Build status line
-printf "${LAVENDER}󰄛${RESET} "
-
-# Model
-printf "${BLUE}${model}${RESET}"
-
-# Session name
-if [ -n "$session_name" ]; then
-    printf " ${SUBTEXT1}│${RESET} ${MAUVE}${session_name}${RESET}"
+# ── Vim mode ─────────────────────────────────────────────────────────────────
+if [[ "$vim_mode" == "NORMAL" ]]; then
+  vim_str="${C_GREEN}N${C_RESET}"
+elif [[ "$vim_mode" == "INSERT" ]]; then
+  vim_str="${C_BLUE}I${C_RESET}"
+else
+  vim_str=""
 fi
 
-# Directory
-printf " ${SUBTEXT1}│${RESET} ${TEXT}${display_dir}${RESET}"
+# ── Context window ───────────────────────────────────────────────────────────
+if (( tokens_max > 0 )); then
+  remaining=$(( tokens_max - tokens_used ))
+  pct=$(( remaining * 100 / tokens_max ))
 
-# Git branch
-if [ -n "$git_branch" ]; then
-    printf " ${git_branch}"
+  if (( tokens_used >= 1000000 )); then
+    used_fmt="$(( tokens_used / 1000000 ))M"
+  elif (( tokens_used >= 1000 )); then
+    used_fmt="$(( tokens_used / 1000 ))k"
+  else
+    used_fmt="$tokens_used"
+  fi
+
+  if (( pct > 50 )); then
+    ctx_color="$C_GREEN"
+  elif (( pct > 20 )); then
+    ctx_color="$C_PEACH"
+  else
+    ctx_color="$C_RED"
+  fi
+  ctx_str="${ctx_color}${used_fmt}${C_RESET}"
+else
+  ctx_str=""
 fi
 
-# Vim mode
-if [ -n "$vim_mode" ]; then
-    if [ "$vim_mode" = "NORMAL" ]; then
-        printf " ${SUBTEXT1}│${RESET} ${GREEN}N${RESET}"
-    else
-        printf " ${SUBTEXT1}│${RESET} ${BLUE}I${RESET}"
-    fi
-fi
+# ── Assemble ─────────────────────────────────────────────────────────────────
+parts=()
+[[ -n "$model_str" ]] && parts+=("$model_str")
+[[ -n "$dir_str" ]] && parts+=("$dir_str")
+[[ -n "$git_str" ]] && parts+=("$git_str")
+[[ -n "$vim_str" ]] && parts+=("$vim_str")
+[[ -n "$ctx_str" ]] && parts+=("$ctx_str")
 
-# Context window (color-coded token usage)
-if [ -n "$tokens_used" ] && [ -n "$tokens_total" ] && [ "$tokens_used" != "null" ] && [ "$tokens_total" != "null" ]; then
-    used_fmt=$(format_tokens "$tokens_used")
-    total_fmt=$(format_tokens "$tokens_total")
-    remaining_int=${remaining%.*}
-    if [ "$remaining_int" -lt 20 ]; then
-        context_color="$RED"
-    elif [ "$remaining_int" -lt 50 ]; then
-        context_color="$PEACH"
-    else
-        context_color="$GREEN"
-    fi
-    printf " ${SUBTEXT1}│${RESET} ${context_color}${used_fmt}/${total_fmt}${RESET}"
-elif [ -n "$remaining" ]; then
-    remaining_int=${remaining%.*}
-    if [ "$remaining_int" -lt 20 ]; then
-        context_color="$RED"
-    elif [ "$remaining_int" -lt 50 ]; then
-        context_color="$PEACH"
-    else
-        context_color="$GREEN"
-    fi
-    printf " ${SUBTEXT1}│${RESET} ${context_color}${remaining_int}%%${RESET}"
-fi
+sep="${C_SURFACE} │ ${C_RESET}"
+out=""
+for i in "${!parts[@]}"; do
+  (( i > 0 )) && out+="$sep"
+  out+="${parts[$i]}"
+done
 
-printf "\n"
+echo -n "$out"

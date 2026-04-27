@@ -10,16 +10,24 @@ Claude Code CLI configuration, status line, and keybindings.
 | `.claude/statusline.sh` | Custom Catppuccin Macchiato status bar script |
 | `.claude/keybindings.json` | Full keybinding overrides for all contexts |
 
+## Permissions
+
+| Setting | Value | Effect |
+|---------|-------|--------|
+| `permissions.defaultMode` | `auto` | Per-action classifier decides whether to prompt |
+| `skipAutoPermissionPrompt` | `true` | Suppress the auto-mode confirmation dialog |
+| `skipDangerousModePermissionPrompt` | `true` | Suppress the dangerous-mode confirmation dialog |
+
 ## Status Line
 
-A bash script that reads JSON from stdin and renders a Catppuccin-colored status bar showing:
+A bash script (`set -euo pipefail`) that reads JSON from stdin and renders a Catppuccin-colored status bar showing:
 
-- Model name (extracted from model ID)
-- Session name
-- Current directory
-- Git branch with dirty indicator
+- Model name (`.model.display_name`, falls back to `.model.id`)
+- Current directory (`.workspace.current_dir`, basename if > 40 chars)
+- Git branch with dirty indicator (peach + `·` if dirty, green if clean)
 - Vim mode (N/I)
-- Context window usage (color-coded: green > 50%, peach > 20%, red < 20%)
+- Context window usage (color-coded: green > 50%, peach > 20%, red < 20%) using
+  `total_input_tokens + total_output_tokens` against `context_window_size`
 
 ## Enabled Plugins
 
@@ -32,6 +40,7 @@ A bash script that reads JSON from stdin and renders a Catppuccin-colored status
 | commit-commands | Git |
 | pr-review-toolkit | Git |
 | claude-code-setup | Setup |
+| claude-md-management | Setup |
 | plugin-dev | Development |
 | skill-creator | Development |
 | agent-sdk-dev | Development |
@@ -40,13 +49,17 @@ A bash script that reads JSON from stdin and renders a Catppuccin-colored status
 | frontend-design | UI |
 | chrome-devtools-mcp | UI |
 | ralph-loop | Automation |
+| caveman (`@caveman`) | Automation |
 | remember | Utility |
 | explanatory-output-style | Utility |
-| typescript-lsp, pyright-lsp, gopls-lsp, csharp-lsp, lua-lsp | Language servers |
+| liquid-skills | Utility |
+| typescript-lsp, pyright-lsp, gopls-lsp, csharp-lsp, lua-lsp, rust-analyzer-lsp | Language servers |
 | playwright | Testing |
-| firebase | Cloud |
-| huggingface-skills | AI/ML |
-| data-engineering, data | Data |
+| semgrep | Security |
+| firebase, azure | Cloud |
+| huggingface-skills, pydantic-ai | AI/ML |
+| data-engineering, data, dataverse, pinecone, goodmem | Data |
+| firecrawl | Web scraping |
 | terraform | Infrastructure |
 | atomic-agents | Agents |
 

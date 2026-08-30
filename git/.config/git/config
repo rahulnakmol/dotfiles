@@ -1,17 +1,38 @@
 [user]
 	name = Rahul N Akmol
 	email = rahulnakmol@gmail.com
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJCF4TkApTmwn6YG96qVb3HvDfr2v48glWCgF4pjNIvD
+	# No signingkey here: it is per machine. See config.local, written by
+	# scripts/setup-signing-key.sh.
 
 [gpg]
 	format = ssh
 
 [gpg "ssh"]
-	program = /opt/1Password/op-ssh-sign
 	allowedSignersFile = ~/.ssh/allowed_signers
+	# Only invoked when user.signingkey is unset — i.e. this machine has never
+	# run scripts/setup-signing-key.sh. config.local (included below) sets
+	# user.signingkey once configured, which always takes priority over this
+	# and stops it from ever running. Until then, it turns git's own
+	# "gpg.ssh.defaultKeyCommand needs to be configured" into the actual fix.
+	# Wrapped in `sh -c` because, unlike gpg.ssh.program, this key is NOT
+	# tilde-expanded by git — `~` here would be passed to exec() literally
+	# and fail with "No such file or directory". sh -c makes $HOME expand at
+	# run time instead. Assumes the repo is cloned to ~/.dotfiles, per README.
+	defaultKeyCommand = sh -c '"$HOME"/.dotfiles/scripts/git-sign-unconfigured'
 
 [commit]
 	gpgsign = true
 
 [tag]
 	gpgsign = true
+
+[init]
+	defaultBranch = main
+
+# Per-machine overrides — last-wins, gitignored. Git silently ignores an
+# include whose target does not exist, so a machine without either file is
+# unaffected.
+[include]
+	path = ~/.config/git/config-credential
+[include]
+	path = ~/.config/git/config.local

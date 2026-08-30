@@ -36,6 +36,10 @@ alias glog='git log --oneline --decorate --all --graph'
 alias gdiff='git diff'
 alias gdiffs='git diff --staged'
 
+# Commit signing — configure per-machine, on demand (scripts/setup-signing-key.sh)
+alias gsign='$HOME/.dotfiles/scripts/setup-signing-key.sh'
+alias gsigns='$HOME/.dotfiles/scripts/setup-signing-key.sh --status'
+
 # Aliases for GitHub CLI
 alias ghl='gh auth login --hostname github.com'
 alias ghs='gh auth status --hostname github.com'

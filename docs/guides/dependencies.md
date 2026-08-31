@@ -241,6 +241,27 @@ The shell config auto-detects Homebrew at `/home/linuxbrew/.linuxbrew` or `/opt/
 
 ---
 
+## WSL-specific
+
+Beyond everything above (install inside the WSL distro, same as native Linux), WSL needs a few
+extra pieces for the interop this repo wires up:
+
+| Tool | Purpose |
+|------|---------|
+| `socat` | Bridges the 1Password Windows agent's named pipe to a Unix socket |
+| [`npiperelay`](https://github.com/jstarks/npiperelay) | The Windows-side half of that bridge — install on Windows, put it on `PATH` |
+| [WezTerm](https://wezfurlong.org/wezterm/) | Terminal — installed on **Windows**, not inside WSL; Ghostty has no Windows build |
+| [Mononoki Nerd Font](https://www.nerdfonts.com/font-downloads) | Install on Windows too, for WezTerm |
+
+```bash
+# Inside WSL (Ubuntu example)
+sudo apt install socat
+```
+
+Full setup: [docs/guides/wsl.md](wsl.md).
+
+---
+
 ## Quick reference
 
 One-liner to install all Tier 1 + Tier 2 tools:

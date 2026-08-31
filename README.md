@@ -38,7 +38,7 @@ Full list with per-distro install commands: [docs/guides/dependencies.md](docs/g
 | `nvim` | LazyVim bootstrap with Catppuccin theme | [details](docs/modules/nvim.md) |
 | `starship` | Prompt with Catppuccin palette and Nerd Font glyphs | [details](docs/modules/starship.md) |
 | `git` | User identity; commit signing configured per machine, on demand | [details](docs/modules/git.md) |
-| `gh` | GitHub CLI, 25 workflow aliases | [details](docs/modules/gh.md) |
+| `gh` | GitHub CLI, 27 workflow aliases | [details](docs/modules/gh.md) |
 | `ssh` | 1Password SSH agent, claimed only when actually running | [details](docs/modules/ssh.md) |
 | `ghostty` | Terminal (Linux): Catppuccin theme, Mononoki font, translucent window | [details](docs/modules/ghostty.md) |
 | `wezterm` | Terminal (WSL): same theme, WSL-domain-aware AI keybindings | [details](docs/modules/wezterm.md) |

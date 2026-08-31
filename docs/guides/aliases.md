@@ -20,11 +20,11 @@ Distro-specific aliases load conditionally based on `$DOTFILES_DISTRO`.
 
 | Alias | Expands to | Description |
 |-------|-----------|-------------|
-| `ls` | `eza -l --color=auto` | Long listing with eza |
-| `l` | `eza -F --color=auto` | Compact listing with type indicators |
+| `ls` | `eza -l --icons=auto --color=auto` | Long listing with eza, icons |
+| `l` | `eza -F --icons=auto --color=auto` | Compact listing with type indicators, icons |
 | `ll` | `ls -alF --color=auto` | All files, long format |
 | `la` | `ls -A --color=auto` | All files except `.` and `..` |
-| `lar` | `ls -laRt changed` | Recursive listing sorted by change time |
+| `lar` | `eza -laR --icons=auto --sort changed` | Recursive listing sorted by change time |
 | `cat` | `bat` | Syntax-highlighted file viewer |
 | `catt` | `bat --theme="Catppuccin Macchiato" --style="header,grid,numbers"` | Themed bat with line numbers |
 
@@ -55,6 +55,8 @@ Distro-specific aliases load conditionally based on `$DOTFILES_DISTRO`.
 | `glog` | `git log --oneline --decorate --all --graph` | Visual commit graph |
 | `gdiff` | `git diff` | Show unstaged changes |
 | `gdiffs` | `git diff --staged` | Show staged changes |
+| `gsign` | `scripts/setup-signing-key.sh` | Configure commit signing for this machine |
+| `gsigns` | `scripts/setup-signing-key.sh --status` | Show what's currently active |
 
 ## GitHub CLI
 
@@ -129,7 +131,8 @@ These target the repo in `$CODEX_GH_REPO` (defaults to `rahulnakmol/opencode`).
 
 ## Docker / Podman
 
-All `docker` commands are aliased to `podman` as a drop-in replacement.
+All `docker` commands are aliased to `podman` as a drop-in replacement (`docker-compose` too, to
+`podman compose`).
 
 | Alias | Expands to | Description |
 |-------|-----------|-------------|

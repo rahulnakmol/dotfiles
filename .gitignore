@@ -12,9 +12,15 @@ gh/.config/gh/hosts.yml
 **/.ssh/id_*
 **/.ssh/*.pem
 **/.ssh/*.key
+# Per-machine access policy, not a portable dotfile: stowing this onto
+# another machine would silently grant those keys inbound SSH there too.
+**/.ssh/authorized_keys
 **/*.env
 **/.env*
+!**/.env.example
+!**/*.env.example
 **/*secret*
+!**/*rules/010-secrets.md
 **/*token*
 
 # Codex — ignore everything except config
@@ -84,9 +90,6 @@ nvim/.config/nvim/lazy-lock.json
 **/zsh/*.local
 **/git/*.local
 **/tmux/plugins/*
-**/karabiner/automatic_backups/*
-**/karabiner/assets/*
-**/zed/conversations/*
 
 # Session / remember data (ephemeral to this machine)
 .remember/

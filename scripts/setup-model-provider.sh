@@ -53,12 +53,15 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CODEX_CONFIG="$HOME/.codex/config.toml"
+CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+CODEX_CONFIG="$CODEX_HOME/config.toml"
+CODEX_AZURE_PROFILE="$CODEX_HOME/azure.config.toml"
 OPENCODE_CONFIG="$ROOT/opencode/.config/opencode/opencode.json"
 ZSHRC_LOCAL="$HOME/.zshrc.local"
 
 AZURE_BEGIN="# BEGIN azure-provider (managed by setup-model-provider.sh)"
 AZURE_END="# END azure-provider"
+AZURE_PROFILE_MARKER="# managed by setup-model-provider.sh — safe to delete, will be regenerated"
 
 MODE=""
 DRY_RUN=0
@@ -206,14 +209,14 @@ mode_codex_azure() {
     exit 1
   fi
 
-  step "Writing the azure model provider + profile into $CODEX_CONFIG"
+  step "Writing the azure model provider into $CODEX_CONFIG"
   local block
   if grep -qF "$AZURE_BEGIN" "$CODEX_CONFIG" 2>/dev/null; then
     log "  replacing the existing managed block (idempotent)"
-  elif grep -qE '^\[model_providers\.azure\]|^\[profiles\.azure\]' "$CODEX_CONFIG" 2>/dev/null; then
-    echo "  $CODEX_CONFIG already has an unmanaged [model_providers.azure] or" >&2
-    echo "  [profiles.azure] block — not touching it. Remove it, or add" >&2
-    echo "  $AZURE_BEGIN / $AZURE_END around it by hand, then re-run." >&2
+  elif grep -qE '^\[model_providers\.azure\]' "$CODEX_CONFIG" 2>/dev/null; then
+    echo "  $CODEX_CONFIG already has an unmanaged [model_providers.azure]" >&2
+    echo "  block — not touching it. Remove it, or add $AZURE_BEGIN / $AZURE_END" >&2
+    echo "  around it by hand, then re-run." >&2
     exit 1
   fi
 
@@ -224,12 +227,6 @@ name = "Azure AI Foundry"
 base_url = "https://${RESOURCE_NAME}.openai.azure.com/openai"
 env_key = "AZURE_OPENAI_API_KEY"
 query_params = { api-version = "2025-04-01-preview" }
-
-[profiles.azure]
-model = "${DEPLOYMENT}"
-model_provider = "azure"
-sandbox_mode = "workspace-write"
-approval_policy = "on-request"
 $AZURE_END
 EOF
 )
@@ -253,11 +250,41 @@ PYEOF
     log "  written"
   fi
 
+  step "Writing the azure profile into $CODEX_AZURE_PROFILE"
+  log "  Codex layers \`--profile <name>\` from its own \$CODEX_HOME/<name>.config.toml"
+  log "  file, not a [profiles.<name>] table in config.toml — a [profiles.azure]"
+  log "  table there is rejected as legacy config by the current CLI."
+  if [[ -f "$CODEX_AZURE_PROFILE" ]] && ! head -1 "$CODEX_AZURE_PROFILE" | grep -qF "$AZURE_PROFILE_MARKER"; then
+    echo "  $CODEX_AZURE_PROFILE already exists and wasn't written by this" >&2
+    echo "  script — not touching it. Remove it or add the marker line" >&2
+    echo "  '$AZURE_PROFILE_MARKER' as its first line, then re-run." >&2
+    exit 1
+  fi
+  local profile_block
+  profile_block=$(cat <<EOF
+$AZURE_PROFILE_MARKER
+model = "${DEPLOYMENT}"
+model_provider = "azure"
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+EOF
+)
+  if [[ "$DRY_RUN" == "1" ]]; then
+    printf '%s\n' "$profile_block" | sed 's/^/  [dry-run] /'
+  else
+    printf '%s\n' "$profile_block" > "$CODEX_AZURE_PROFILE"
+    log "  written"
+  fi
+
   step "Verifying"
   if [[ "$DRY_RUN" == "1" ]]; then
     log "  [dry-run] would run: codex --profile azure exec \"reply OK\""
   elif command -v codex &>/dev/null; then
-    if AZURE_OPENAI_API_KEY="$key" codex --profile azure exec "reply OK" &>/tmp/codex-azure-verify.log; then
+    # exec reads stdin if it's left open, which hangs forever with no
+    # controlling TTY (cron, CI, an agent invocation); < /dev/null plus a
+    # bounded timeout keep this call from ever blocking indefinitely.
+    if AZURE_OPENAI_API_KEY="$key" timeout 30 codex --profile azure exec "reply OK" \
+        </dev/null &>/tmp/codex-azure-verify.log; then
       log "  PASS — codex --profile azure answered"
     else
       log "  FAIL — see /tmp/codex-azure-verify.log (key value itself is never in that log)"
@@ -275,18 +302,37 @@ mode_opencode_azure() {
   local key
   key="$(resolve_azure_key)" || { echo "No key resolved — aborting." >&2; exit 1; }
 
-  if [[ -z "${AZURE_OPENAI_API_KEY:-}" ]]; then
-    step "Persisting AZURE_OPENAI_API_KEY for future shells"
-    log "  opencode.json only ever gets the reference {env:AZURE_OPENAI_API_KEY} —"
-    log "  never the literal value. Same variable name as Codex uses, on purpose:"
-    log "  one key, two tools."
-    persist_local_export "export AZURE_OPENAI_API_KEY='$key'"
+  # OpenCode treats "azure" as its own built-in, Models.dev-backed provider
+  # (npm/options overrides on a custom provider.azure entry are ignored for
+  # this reserved id — confirmed against the real opencode-ai CLI). It reads
+  # the key and resource name straight from AZURE_API_KEY / AZURE_RESOURCE_NAME
+  # in the environment, not from anything in opencode.json — a different
+  # variable name than Codex's env_key = "AZURE_OPENAI_API_KEY", same secret.
+  step "Persisting AZURE_API_KEY and AZURE_RESOURCE_NAME for future shells"
+  log "  OpenCode's built-in azure provider reads these two env vars directly;"
+  log "  nothing in opencode.json ever holds the key itself."
+  if [[ -z "${AZURE_API_KEY:-}" ]]; then
+    persist_local_export "export AZURE_API_KEY='$key'"
   fi
   persist_local_export "export AZURE_RESOURCE_NAME='$RESOURCE_NAME'"
 
-  step "Writing the azure provider into $OPENCODE_CONFIG"
+  step "Registering the ${DEPLOYMENT} deployment in $OPENCODE_CONFIG"
+  log "  Only the deployment name is written here — never a key. This just"
+  log "  tells OpenCode that '${DEPLOYMENT}' is a valid model under azure/."
+  if ! python3 -c "
+import json, sys
+d = json.load(open('$OPENCODE_CONFIG'))
+azure = d.get('provider', {}).get('azure')
+# Safe to write when there's no existing entry, or the existing one is ours.
+sys.exit(0 if azure is None or '_managed_by' in azure else 1)
+"; then
+    echo "  $OPENCODE_CONFIG already has an unmanaged provider.azure entry —" >&2
+    echo "  not touching it. Remove it, or add \"_managed_by\": \"setup-model-provider.sh\"" >&2
+    echo "  to it by hand, then re-run." >&2
+    exit 1
+  fi
   if [[ "$DRY_RUN" == "1" ]]; then
-    log "  [dry-run] would merge provider.azure into opencode.json"
+    log "  [dry-run] would merge provider.azure.models.${DEPLOYMENT} into opencode.json"
   else
     RESOURCE_NAME="$RESOURCE_NAME" DEPLOYMENT="$DEPLOYMENT" \
       node - "$OPENCODE_CONFIG" <<'NODEEOF'
@@ -296,12 +342,6 @@ const cfg = JSON.parse(fs.readFileSync(path, "utf8"));
 cfg.provider = cfg.provider || {};
 cfg.provider.azure = {
   _managed_by: "setup-model-provider.sh",
-  npm: "@ai-sdk/azure",
-  name: "Azure AI Foundry",
-  options: {
-    resourceName: process.env.RESOURCE_NAME,
-    apiKey: "{env:AZURE_OPENAI_API_KEY}",
-  },
   models: {
     [process.env.DEPLOYMENT]: { name: `${process.env.DEPLOYMENT} (Azure)` },
   },
@@ -315,7 +355,9 @@ NODEEOF
   if [[ "$DRY_RUN" == "1" ]]; then
     log "  [dry-run] would run: opencode run -m azure/$DEPLOYMENT \"reply OK\""
   elif command -v opencode &>/dev/null; then
-    if AZURE_OPENAI_API_KEY="$key" opencode run -m "azure/$DEPLOYMENT" "reply OK" &>/tmp/opencode-azure-verify.log; then
+    if AZURE_API_KEY="$key" AZURE_RESOURCE_NAME="$RESOURCE_NAME" \
+        timeout 30 opencode run -m "azure/$DEPLOYMENT" "reply OK" \
+        </dev/null &>/tmp/opencode-azure-verify.log; then
       log "  PASS — opencode answered via the azure provider"
     else
       log "  FAIL — see /tmp/opencode-azure-verify.log (key value itself is never in that log)"
@@ -329,7 +371,7 @@ NODEEOF
 mode_status() {
   step "Codex"
   if [[ -f "$CODEX_CONFIG" ]]; then
-    if grep -qF "$AZURE_BEGIN" "$CODEX_CONFIG"; then
+    if grep -qF "$AZURE_BEGIN" "$CODEX_CONFIG" && [[ -f "$CODEX_AZURE_PROFILE" ]]; then
       log "  azure profile:       configured (codex --profile azure)"
     else
       log "  azure profile:       not configured"
@@ -349,9 +391,14 @@ mode_status() {
 
   step "Environment (values never shown — only whether they're set)"
   if [[ -n "${AZURE_OPENAI_API_KEY:-}" ]]; then
-    log "  AZURE_OPENAI_API_KEY: set (${#AZURE_OPENAI_API_KEY} chars)"
+    log "  AZURE_OPENAI_API_KEY: set (${#AZURE_OPENAI_API_KEY} chars) — Codex's env_key"
   else
     log "  AZURE_OPENAI_API_KEY: not set in this shell"
+  fi
+  if [[ -n "${AZURE_API_KEY:-}" ]]; then
+    log "  AZURE_API_KEY:        set (${#AZURE_API_KEY} chars) — OpenCode's built-in azure provider"
+  else
+    log "  AZURE_API_KEY:        not set in this shell"
   fi
   log "  AZURE_RESOURCE_NAME:  ${AZURE_RESOURCE_NAME:-not set in this shell}"
 }

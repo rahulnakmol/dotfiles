@@ -49,40 +49,17 @@ ignore_default_excludes = false
 # ── Profiles ─────────────────────────────────────────────────────────────
 # Mirror the OpenCode agents and Claude aliases one-to-one so the same job
 # feels the same regardless of which tool you reach for.
-
-[profiles.code]
-# Mirrors OpenCode's `pro` agent / Claude's `cco` — deep work, architecture.
-model = "gpt-5.1-codex-max"
-sandbox_mode = "workspace-write"
-approval_policy = "on-request"
-model_reasoning_effort = "xhigh"
-
-[profiles.codex]
-# Daily driver.
-model = "gpt-5.1-codex-max"
-sandbox_mode = "workspace-write"
-approval_policy = "on-request"
-model_reasoning_effort = "medium"
-
-[profiles.plan]
-# Mirrors Claude's `ccpl` — read-only exploration, no network, no writes.
-model = "gpt-5.1-codex-max"
-sandbox_mode = "read-only"
-approval_policy = "untrusted"
-model_reasoning_effort = "high"
-
-[profiles.review]
-# Read-only code review, using review_model above.
-sandbox_mode = "read-only"
-approval_policy = "untrusted"
-
-[profiles.quick]
-# Mirrors OpenCode's `quick` — fast, cheap answers.
-model = "gpt-5.1-codex-max"
-sandbox_mode = "read-only"
-approval_policy = "untrusted"
-model_reasoning_effort = "minimal"
-tools_web_search = false
+#
+# Each profile is its own file — code.config.toml, codex.config.toml,
+# plan.config.toml, review.config.toml, quick.config.toml, all stowed
+# alongside this one — not a [profiles.<name>] table in here. Confirmed
+# against the real, currently-published codex-cli (0.151.0): `--profile
+# <name>` layers `$CODEX_HOME/<name>.config.toml` on top of this file, and
+# refuses to run at all if a [profiles.<name>] table with that same name
+# also exists here ("legacy" config, per its own error) — a [profiles.*]
+# table was the documented mechanism when this file was first written, but
+# it's since been superseded. Verified with `codex --profile <name> exec`
+# against each file below before landing this.
 
 # ── MCP servers ──────────────────────────────────────────────────────────
 

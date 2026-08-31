@@ -23,9 +23,16 @@ gh/.config/gh/hosts.yml
 !**/*rules/010-secrets.md
 **/*token*
 
-# Codex — ignore everything except config
+# Codex — ignore everything except config and the tracked per-profile files
+# (azure.config.toml is written per-machine by setup-model-provider.sh
+# directly into ~/.codex/, never through stow, so it never lands here)
 codex/.codex/*
 !codex/.codex/config.toml
+!codex/.codex/code.config.toml
+!codex/.codex/codex.config.toml
+!codex/.codex/plan.config.toml
+!codex/.codex/review.config.toml
+!codex/.codex/quick.config.toml
 
 # Claude Code — ignore everything except configuration files
 claude/.claude/*

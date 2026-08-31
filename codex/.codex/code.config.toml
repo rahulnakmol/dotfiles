@@ -1,0 +1,5 @@
+# Mirrors OpenCode's `pro` agent / Claude's `cco` — deep work, architecture.
+model = "gpt-5.1-codex-max"
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+model_reasoning_effort = "xhigh"

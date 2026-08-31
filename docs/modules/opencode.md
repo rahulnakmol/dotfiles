@@ -46,12 +46,17 @@ as an **additional**, opt-in provider:
 opencode run -m azure/gpt-5 "reply OK"   # use it
 ```
 
-This merges a marker-guarded `provider.azure` block into `opencode.json` using the
-`@ai-sdk/azure` package and OpenCode's own `{env:AZURE_OPENAI_API_KEY}` templating — the committed
-file only ever holds that reference, never the literal key. The script resolves the key the same
-way as the Codex flow above (already-exported env var → 1Password → hidden prompt, never a CLI
-flag), persisting it only to `~/.zshrc.local` if it has to ask. Re-running is idempotent, and a
-pre-existing unmanaged `provider.azure` entry is left alone rather than overwritten. See
+`azure` is a reserved, Models.dev-backed provider id in OpenCode's own catalog — a custom
+`npm`/`options` override on it is silently ignored by the real CLI, confirmed by testing rather
+than assumed. So the script doesn't try to override it: it only merges a marker-guarded
+`provider.azure.models.<deployment>` entry into `opencode.json`, registering the deployment name as
+a valid model, and relies on OpenCode's built-in azure provider reading the key and resource name
+straight from `AZURE_API_KEY` and `AZURE_RESOURCE_NAME` in the environment — a different variable
+name than Codex's `env_key = "AZURE_OPENAI_API_KEY"`, same underlying secret. Nothing in
+`opencode.json` ever holds the key. The script resolves it the same way as the Codex flow above
+(already-exported env var → 1Password → hidden prompt, never a CLI flag), persisting it only to
+`~/.zshrc.local` if it has to ask. Re-running is idempotent, and a pre-existing unmanaged
+`provider.azure` entry is left alone rather than overwritten. See
 `scripts/setup-model-provider.sh --help` and `docs/modules/codex.md` for the full safety design,
 which is shared across both tools.
 

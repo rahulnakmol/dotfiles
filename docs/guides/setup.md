@@ -134,6 +134,25 @@ this machine once:
 See [docs/modules/git.md](../modules/git.md) for what each mode does, and
 [docs/guides/wsl.md](wsl.md#commit-signing-on-wsl) for the WSL-specific paths.
 
+### Codex / OpenCode model provider
+
+Codex defaults to your ChatGPT plan and OpenCode to its Zen provider — nothing to do for either.
+If you also want an Azure AI Foundry endpoint available (additive, not a replacement), or want a
+guided, scripted `codex login`:
+
+```bash
+./scripts/setup-model-provider.sh --codex-chatgpt     # guided `codex login`
+./scripts/setup-model-provider.sh --codex-azure --resource-name=NAME --deployment=NAME
+./scripts/setup-model-provider.sh --opencode-azure --resource-name=NAME --deployment=NAME
+./scripts/setup-model-provider.sh --status            # what's configured, no secrets shown
+```
+
+No `--api-key` flag — it resolves the key from an already-exported env var, 1Password, or a hidden
+prompt, and never writes it into a tracked file. See
+[docs/modules/codex.md](../modules/codex.md#alternative-azure-ai-foundry) and
+[docs/modules/opencode.md](../modules/opencode.md#alternative-azure-ai-foundry) for what each mode
+writes and why.
+
 ### GitHub CLI
 
 ```bash

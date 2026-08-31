@@ -58,6 +58,27 @@ cursor/.cursor/agent-cli-state.json
 cursor/.cursor/statsig-cache.json
 cursor/.cursor/.cursorignore
 
+# OpenCode — configs only; agents/workflows/skills/plugins + npm install via
+# bootstrap. update-models.sh is NOT ignored here (unlike the macOS repo) —
+# it's a real, tracked script in this repo (the ocum/ocumd aliases and
+# README both reference it), not bootstrap-generated output.
+opencode/.config/opencode/agents/
+opencode/.config/opencode/commands/
+opencode/.config/opencode/workflows/
+opencode/.config/opencode/skills/
+opencode/.config/opencode/plugins/
+opencode/.config/opencode/SDLC_*.md
+opencode/.config/opencode/model-research.md
+opencode/.config/opencode/node_modules/
+opencode/.config/opencode/package.json
+opencode/.config/opencode/package-lock.json
+opencode/.config/opencode/bun.lock
+opencode/.config/opencode/*.bak
+
+# Skills bootstrap — installed via scripts/bootstrap-skills.sh, not vendored
+.agents/
+skills-lock.json
+
 # Module-specific ephemeral data
 nvim/.config/nvim/lazy-lock.json
 **/zsh/*.local

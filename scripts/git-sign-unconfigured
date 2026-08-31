@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# gpg.ssh.defaultKeyCommand fallback. Git calls this ONLY when user.signingkey
+# is unset — i.e. scripts/setup-signing-key.sh has never run on this machine.
+# Once it has, config.local sets user.signingkey directly, which always wins
+# over defaultKeyCommand, so this never runs again there.
+#
+# commit.gpgsign is committed as `true` on purpose: an unconfigured box should
+# refuse to commit, not silently produce unsigned work. This exists so the
+# refusal comes with the fix instead of git's generic
+# "gpg.ssh.defaultKeyCommand needs to be configured".
+set -euo pipefail
+
+cat >&2 <<'MSG'
+✗ Commit signing is on, but this machine has no signing key configured.
+  Set one up:        ~/.dotfiles/scripts/setup-signing-key.sh --local
+  Or use 1Password:  ~/.dotfiles/scripts/setup-signing-key.sh --1password
+  Status:            ~/.dotfiles/scripts/setup-signing-key.sh --status
+MSG
+exit 1

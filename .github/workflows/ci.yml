@@ -1,0 +1,81 @@
+name: Security & Linting CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+
+      - name: Install tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zsh stow socat shellcheck
+          curl -sSL -o /tmp/stylua.zip https://github.com/JohnnyMorganz/StyLua/releases/latest/download/stylua-linux-x86_64.zip
+          sudo unzip -o /tmp/stylua.zip -d /usr/local/bin
+          sudo chmod +x /usr/local/bin/stylua
+
+      - name: Syntax-check every zsh file
+        run: |
+          zsh -n zsh/.zshrc
+          zsh -n zsh/.zprofile
+          for f in zsh/.zshrc.d/*.zsh; do zsh -n "$f"; done
+
+      - name: Shellcheck every shell script
+        run: |
+          shellcheck zsh/.zshrc.d/*.sh scripts/*.sh scripts/git-sign-unconfigured \
+            claude/.claude/statusline.sh opencode/.config/opencode/update-models.sh
+
+      - name: Lint Lua configs (nvim + wezterm)
+        run: stylua --check nvim/.config/nvim wezterm/.config/wezterm
+
+      - name: tmux smoke test
+        run: |
+          tmux -f tmux/.config/tmux/tmux.conf -L ci new-session -d
+          tmux -L ci kill-server
+
+      - name: Stow dry-run — every module deploys without conflicts
+        run: |
+          mkdir -p /tmp/stowtarget
+          # Explicit list, not auto-discovered: this repo root also has
+          # non-module directories (docs/, scripts/, .github/, and .claude/
+          # — this repo's own Claude Code project config, distinct from the
+          # claude/ stow module) that auto-discovery would try to stow
+          # straight into $HOME as nonsense top-level symlinks.
+          stow -n -v -t /tmp/stowtarget \
+            1password bat claude codex gh ghostty git nvim opencode \
+            ssh starship tmux wezterm zsh
+
+      - name: Agent policy validator
+        run: node scripts/validate-agent-policy.mjs
+
+      - name: Regressions this repo has hit before — must never come back
+        run: |
+          ! grep -q '1Password' git/.config/git/config
+          ! grep -rq 'GIT_CONFIG_COUNT' zsh/
+          ! grep -rq '/usr/bin/gh' git/
+          ! grep -qE 'model_providers\.azure|AZURE_OPENAI_API_KEY' codex/.codex/config.toml
+
+  secret-scanning:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Trufflehog secret scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --debug --only-verified

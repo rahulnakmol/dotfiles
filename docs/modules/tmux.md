@@ -17,6 +17,7 @@ Tmux configuration with Catppuccin Macchiato theme, custom key tables for Claude
 | Mouse | Enabled |
 | Base index | 1 (windows and panes) |
 | Renumber windows | On |
+| `set-clipboard` | On — OSC 52 passthrough, complements tmux-yank below |
 
 ## Navigation (prefix-free)
 
@@ -85,6 +86,20 @@ Catppuccin Macchiato with rounded window status style, bottom status bar, applic
 | `tmux-plugins/tmux-cpu` | CPU / RAM module for status bar |
 | `tmux-plugins/tmux-battery` | Battery module for status bar |
 | `olimorris/tmux-pomodoro-plus` | Pomodoro timer module |
+| `tmux-plugins/tmux-resurrect` | Snapshot session/window/pane layout, working dirs, and active pane |
+| `tmux-plugins/tmux-continuum` | Autosave scheduler around resurrect — **must be the last `@plugin` line**: it installs its autosave hook into `status-right`, and `catppuccin/tmux` overwrites that variable if continuum loads first |
+
+### Session persistence
+
+`@resurrect-processes` is deliberately left unset — only resurrect's hardcoded allowlist applies
+(`vi vim view nvim emacs man less more tail top htop irssi weechat mutt`). Claude Code and OpenCode
+are never added: restore fires unattended at tmux server start, which on a box that just booted is
+exactly when nobody is watching an agent with shell access. Save interval and
+`@resurrect-capture-pane-contents` are host-conditional in `tmux.conf` (`if-shell` on `hostname
+-s`) — capturing pane contents writes scrollback to plaintext on every save, which is a real
+decision on a box that ever has secrets pass through a pane, not just a convenience toggle.
+
+The save directory is created on first save, not at install — force one with `C-a C-s`.
 
 ## Dependencies
 

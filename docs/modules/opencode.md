@@ -36,6 +36,30 @@ Each agent has a custom system prompt tailored to its role.
 | Theme | catppuccin |
 | Scroll acceleration | enabled |
 
+## Alternative: Azure AI Foundry
+
+The default `opencode` (Zen) provider stays untouched by this. To add an Azure AI Foundry endpoint
+as an **additional**, opt-in provider:
+
+```bash
+./scripts/setup-model-provider.sh --opencode-azure --resource-name=my-resource --deployment=gpt-5
+opencode run -m azure/gpt-5 "reply OK"   # use it
+```
+
+`azure` is a reserved, Models.dev-backed provider id in OpenCode's own catalog — a custom
+`npm`/`options` override on it is silently ignored by the real CLI, confirmed by testing rather
+than assumed. So the script doesn't try to override it: it only merges a marker-guarded
+`provider.azure.models.<deployment>` entry into `opencode.json`, registering the deployment name as
+a valid model, and relies on OpenCode's built-in azure provider reading the key and resource name
+straight from `AZURE_API_KEY` and `AZURE_RESOURCE_NAME` in the environment — a different variable
+name than Codex's `env_key = "AZURE_OPENAI_API_KEY"`, same underlying secret. Nothing in
+`opencode.json` ever holds the key. The script resolves it the same way as the Codex flow above
+(already-exported env var → 1Password → hidden prompt, never a CLI flag), persisting it only to
+`~/.zshrc.local` if it has to ask. Re-running is idempotent, and a pre-existing unmanaged
+`provider.azure` entry is left alone rather than overwritten. See
+`scripts/setup-model-provider.sh --help` and `docs/modules/codex.md` for the full safety design,
+which is shared across both tools.
+
 ## Model Update Script
 
 `update-models.sh` fetches the latest model catalog from `https://opencode.ai/zen/v1/models` and updates `opencode.json` agent model IDs using version-sorted selection.

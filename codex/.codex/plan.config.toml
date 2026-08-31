@@ -1,0 +1,9 @@
+# Mirrors Claude's `ccpl` — read-only exploration, no network, no writes.
+model = "gpt-5.1-codex-max"
+sandbox_mode = "read-only"
+# codex-cli's approval_policy is down to two values now: on-request and
+# never (confirmed against the real CLI — "untrusted" errors as no longer
+# supported). read-only sandbox_mode is what actually blocks writes here;
+# on-request is the closer of the two to the old "ask before anything" intent.
+approval_policy = "on-request"
+model_reasoning_effort = "high"

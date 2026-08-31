@@ -48,14 +48,18 @@ stow zsh
 # Step 2: Core tools
 stow git ssh starship bat
 
-# Step 3: Terminal and editor
-stow tmux ghostty nvim
+# Step 3: Terminal and editor — ghostty on native Linux, wezterm on WSL
+# (Ghostty has no Windows build; see docs/guides/wsl.md for the extra
+# symlink step WezTerm needs)
+stow tmux nvim
+stow ghostty   # native Linux
+stow wezterm   # WSL only
 
 # Step 4: Dev tools
 stow gh
 
 # Step 5: AI coding tools
-stow claude opencode codex
+stow claude cursor opencode codex
 
 # Step 6: Credentials (if using 1Password)
 stow 1password
@@ -67,10 +71,19 @@ To preview what stow will do before committing:
 stow -n zsh    # dry-run, shows what symlinks would be created
 ```
 
-To deploy everything at once:
+To deploy everything at once (native Linux — swap `ghostty` for `wezterm` on WSL):
 
 ```bash
-stow zsh git ssh starship bat tmux ghostty nvim gh claude opencode codex 1password
+stow zsh git ssh starship bat tmux ghostty nvim gh claude cursor opencode codex 1password
+```
+
+### Renaming an existing machine's `00-distro.zsh`
+
+If you deployed this repo before `00-distro.zsh` was renamed to `00-platform.zsh`, re-stow zsh so
+the stale symlink is cleaned up rather than left pointing at a file that no longer exists:
+
+```bash
+stow -D zsh && stow zsh
 ```
 
 ## 5. Post-install steps
@@ -95,12 +108,50 @@ Wait for Lazy to finish, then quit and reopen. Run `:checkhealth` to verify ever
 
 ### 1Password SSH agent
 
-If using 1Password for SSH keys and commit signing:
+If using 1Password for SSH keys:
 
 1. Install 1Password and the 1Password CLI
 2. Enable the SSH agent in 1Password settings
 3. Deploy the module: `stow 1password`
-4. The SSH config and git config reference the 1Password agent socket automatically
+4. SSH picks it up automatically — `ssh/.ssh/config` only claims the agent socket when it
+   actually exists, so this is safe to do in any order
+5. For commit signing specifically, also run `./scripts/setup-signing-key.sh --1password` (see
+   below) — the agent alone isn't enough, since signing is configured per machine, not implied by
+   the agent being present
+
+### Commit signing
+
+Signing is on by default in the committed git config, and an unconfigured machine refuses to
+commit — deliberately, so you find out immediately rather than pushing unsigned work. Configure
+this machine once:
+
+```bash
+./scripts/setup-signing-key.sh --local       # on-disk key, no 1Password needed
+# or
+./scripts/setup-signing-key.sh --1password   # use the 1Password SSH agent
+```
+
+See [docs/modules/git.md](../modules/git.md) for what each mode does, and
+[docs/guides/wsl.md](wsl.md#commit-signing-on-wsl) for the WSL-specific paths.
+
+### Codex / OpenCode model provider
+
+Codex defaults to your ChatGPT plan and OpenCode to its Zen provider — nothing to do for either.
+If you also want an Azure AI Foundry endpoint available (additive, not a replacement), or want a
+guided, scripted `codex login`:
+
+```bash
+./scripts/setup-model-provider.sh --codex-chatgpt     # guided `codex login`
+./scripts/setup-model-provider.sh --codex-azure --resource-name=NAME --deployment=NAME
+./scripts/setup-model-provider.sh --opencode-azure --resource-name=NAME --deployment=NAME
+./scripts/setup-model-provider.sh --status            # what's configured, no secrets shown
+```
+
+No `--api-key` flag — it resolves the key from an already-exported env var, 1Password, or a hidden
+prompt, and never writes it into a tracked file. See
+[docs/modules/codex.md](../modules/codex.md#alternative-azure-ai-foundry) and
+[docs/modules/opencode.md](../modules/opencode.md#alternative-azure-ai-foundry) for what each mode
+writes and why.
 
 ### GitHub CLI
 
@@ -112,7 +163,7 @@ gh auth login
 
 Starship initializes automatically from `.zshrc`. No extra setup needed after `stow starship`.
 
-## 6. Multi-distro notes
+## 6. Multi-distro and WSL notes
 
 The shell config detects your distro automatically via `/etc/os-release` and sets `$DOTFILES_DISTRO`:
 
@@ -125,6 +176,10 @@ The shell config detects your distro automatically via `/etc/os-release` and set
 Distro-specific alias files (`pkg-ubuntu.zsh`, `pkg-fedora.zsh`, `pkg-opensuse.zsh`) self-guard -- they return immediately on the wrong distro. No manual configuration needed.
 
 On Ubuntu, Homebrew is auto-detected and `brew` aliases are loaded when available.
+
+Running inside WSL is detected the same way (`$DOTFILES_WSL`, split into `1`/`2`) alongside the
+distro. See [docs/guides/wsl.md](wsl.md) for everything WSL-specific: the 1Password agent bridge,
+clipboard, WezTerm instead of Ghostty, and commit signing.
 
 ## 7. Keeping things updated
 

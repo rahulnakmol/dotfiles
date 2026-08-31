@@ -6,14 +6,19 @@ Modular config files auto-loaded via `~/.zshrc` in sort order. All aliases follo
 
 | File | Purpose | Loaded |
 |------|---------|--------|
-| `00-distro.zsh` | Detect distro, export `$DOTFILES_DISTRO` and `$DOTFILES_BREW_PREFIX` | Always (first) |
+| `00-platform.zsh` | Detect distro (`$DOTFILES_DISTRO`) and WSL (`$DOTFILES_WSL`, 1/2), Windows identity, `$DOTFILES_BREW_PREFIX` | Always (first) |
+| `10-wsl.zsh` | 1Password agent bridge, clipboard, Windows interop, PATH hygiene | WSL only |
+| `11-clipboard.zsh` | pbcopy/pbpaste for native Linux (wl-copy → xclip → xsel) | Non-WSL only |
 | `aliases.zsh` | Universal aliases (git, tmux, docker, npm, ssh, editors, AI tools) | Always |
 | `pkg-ubuntu.zsh` | apt + Homebrew aliases | Ubuntu/Debian only |
 | `pkg-fedora.zsh` | dnf aliases | Fedora/RHEL only |
 | `pkg-opensuse.zsh` | zypper aliases | openSUSE only |
+| `zz-wsl-aliases.zsh` | `prj`/`ghr` overridden to the Windows filesystem — loads after `aliases.zsh` on purpose (`zz-`, not a number: digits sort before letters) | WSL only |
 | `catppuccin-fzf-macchiato.sh` | FZF Catppuccin theme colors | Always |
 
-Package manager files self-guard with `[[ "$DOTFILES_DISTRO" == "..." ]] || return 0` so they are no-ops on other distros.
+Package manager files self-guard with `[[ "$DOTFILES_DISTRO" == "..." ]] || return 0`; the WSL
+files self-guard with `[[ -n "$DOTFILES_WSL" ]] || return 0` (or the inverse for
+`11-clipboard.zsh`) — all are no-ops on the wrong platform.
 
 ## Navigation & File Listing
 
@@ -28,11 +33,11 @@ Package manager files self-guard with `[[ "$DOTFILES_DISTRO" == "..." ]] || retu
 
 | Alias | Command | Description |
 |-------|---------|-------------|
-| `ls` | `eza -l` | Long listing (replaces ls) |
-| `l` | `eza -F` | Compact listing with indicators |
+| `ls` | `eza -l --icons=auto` | Long listing with icons (replaces ls) |
+| `l` | `eza -F --icons=auto` | Compact listing with indicators |
 | `ll` | `ls -alF` | All files, long format |
 | `la` | `ls -A` | All except `.` and `..` |
-| `lar` | `ls -laRt changed` | Recursive, sorted by change time |
+| `lar` | `eza -laR --icons=auto --sort changed` | Recursive, sorted by change time |
 
 ## Package Managers
 

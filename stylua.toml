@@ -1,0 +1,8 @@
+# Root-level: applies to any Lua file not covered by a more specific
+# stylua.toml closer to it (nvim/.config/nvim has its own, identical, copy —
+# stylua finds the nearer one first, so this exists for everything else,
+# wezterm/.config/wezterm included). Kept in sync with nvim's by hand; if
+# they ever need to diverge, that's the signal to actually justify it.
+indent_type = "Spaces"
+indent_width = 2
+column_width = 120

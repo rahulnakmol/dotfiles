@@ -1,14 +1,20 @@
 # claude
 
-Claude Code CLI configuration, status line, and keybindings.
+Claude Code CLI configuration, status line, keybindings, and project instructions.
 
 ## Key Files
 
 | File | Purpose |
 |------|---------|
-| `.claude/settings.json` | Status line config and enabled plugins |
+| `.claude/settings.json` | Status line config, enabled plugins, secret deny list |
 | `.claude/statusline.sh` | Custom Catppuccin Macchiato status bar script |
 | `.claude/keybindings.json` | Full keybinding overrides for all contexts |
+| `.claude/CLAUDE.md` | Always-loaded project instructions (architecture principles, non-negotiables) |
+| `.claude/rules/` | 10 path-scoped rules (python/go/dotnet/typescript/terraform/docker/cloud-azure/cloud-gcp/agentic-ai/power-platform-dynamics) + the always-on secrets rule — see `rules/README.md` for which file loads on what |
+
+`permissions.deny`, `CLAUDE.md`'s secrets section, and `rules/010-secrets.md` are all generated
+from [`agent-policy/catalog.json`](../../agent-policy/) by `node scripts/apply-agent-policy.mjs` —
+edit the catalog, not these files directly, and re-run the script.
 
 ## Permissions
 
@@ -20,9 +26,10 @@ Claude Code CLI configuration, status line, and keybindings.
 
 ### Secret / credential deny list
 
-`permissions.deny` blocks `Read`, `Write`, and `Edit` on common credential
-locations across any Unix/Linux platform. Patterns are gitignore-style globs;
-`~` expands to `$HOME`, `**` matches any depth.
+`permissions.deny` blocks `Read` and `Edit` on common credential locations across any Unix/Linux
+platform (not `Write` — Claude Code has no separate write-file tool; `Edit` covers it). Patterns
+are gitignore-style globs; `~` expands to `$HOME`, `**` matches any depth. `Edit` denies are new —
+an earlier version of this deny list covered `Read` only.
 
 | Category | Paths |
 |----------|-------|
@@ -36,6 +43,7 @@ locations across any Unix/Linux platform. Patterns are gitignore-style globs;
 | System | `/etc/shadow`, `/etc/gshadow`, `/etc/sudoers`, `/etc/sudoers.d/**` |
 | Project secrets | `**/.env`, `**/.env.*`, `**/.envrc`, `**/secrets.{yaml,yml}`, `**/credentials.{json,yaml}`, `**/service-account*.json` |
 | Key material | `**/*.pem`, `**/*.key`, `**/*.p12`, `**/*.pfx` |
+| WSL / Windows-side | `/mnt/c/Users/*/.ssh/**`, `/mnt/c/Users/*/.aws/**`, `/mnt/c/Users/*/.azure/**`, `/mnt/c/Users/*/AppData/Local/1Password/**`, `/mnt/wsl/**`, `~/.codex/auth.json` |
 
 > **Limitation:** deny rules apply to the `Read`/`Write`/`Edit` tools only.
 > Bash subprocesses (`cat`, `tail`, `grep`, etc.) are not blocked by these

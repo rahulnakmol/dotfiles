@@ -1,65 +1,77 @@
-model = "gpt-5-codex"
-model_provider = "azure"
-model_reasoning_effort = "medium"
+# Codex config — ChatGPT Pro plan, not Azure. Sign in once with:
+#   codex login   (choose "Sign in with ChatGPT")
+# Model IDs below are gpt-5.1-codex-max, the default confirmed in Codex's
+# own docs at time of writing — but plan entitlement decides what's actually
+# reachable and sources disagree on the current default (gpt-5.1-codex-max
+# vs gpt-5.2-codex for ChatGPT-signed-in accounts). Confirm after signing in
+# with `codex --profile <name> exec "reply OK"` for each profile below and
+# adjust the model strings if a different one is actually available.
+
+model = "gpt-5.1-codex-max"
+review_model = "gpt-5.1-codex-max"
+# Default is already "openai" with no [model_providers] table needed once
+# signed in via ChatGPT — no base_url, no API key, no provider block.
+
+# Explicit because this box previously ran an API-key setup: when both an
+# API key and a ChatGPT session are present, this decides which wins. Also
+# the documented default, so it only ever reasserts the intended behavior.
+preferred_auth_method = "chatgpt"
+
 model_reasoning_summary = "detailed"
+
 sandbox_mode = "workspace-write"
-
-[model_providers.azure]
-name = "Azure OpenAI"
-base_url = "https://azai-eus2-connected-auto-dev-01.openai.azure.com/openai/v1"
-env_key = "AZURE_OPENAI_API_KEY"
-wire_api = "responses"
-
-[features]
-streambale_shell = true
-rmcp_client = true
-#web_search_request = true
-
-[profiles.code]
-model = "gpt-5"
-model_provider = "azure"
-model_reasoning_effort = "high"
-model_reasoning_summary = "detailed"
 approval_policy = "on-request"
 
+[sandbox_workspace_write]
+network_access = false
+exclude_slash_tmp = false
+writable_roots = []
 
-[profiles.codex]
-model = "gpt-5-codex"
-model_provider = "azure"
-model_reasoning_effort = "high"
-model_reasoning_summary = "detailed"
-approval_policy = "on-request"
+# BEGIN agent-policy (managed by apply-agent-policy.mjs)
+[shell_environment_policy]
+exclude = ["AWS_*","AZURE_*","GCP_*","GOOGLE_*","GITHUB_*","OP_*","DIGITALOCEAN_*","NETLIFY_*","HEROKU_*","VAULT_*"]
+ignore_default_excludes = false
+# END agent-policy
 
-[profiles.plan]
-model = "gpt-5-codex"
-model_provider = "azure"
-model_reasoning_effort = "medium"
-model_reasoning_summary = "detailed"
-sandbox_mode = "read-only"
-approval_policy = "on-failure"
+# [projects."<absolute-path>"] trust entries deliberately NOT committed here.
+# TOML never does variable expansion — table keys are as literal as values,
+# so "$HOME/.dotfiles" wouldn't resolve any better than the old hardcoded
+# "/home/rahulnakmol/.dotfiles" did; it would just be a different string
+# that never matches a real path. Unlike git (which has an [include] for
+# exactly this), Codex has one config file with no per-machine layer, so
+# this is genuinely per-machine data with nowhere portable to live. Trust
+# it locally after stowing: either answer the interactive trust prompt on
+# first run, or add your own
+#   [projects."/actual/absolute/path/to/.dotfiles"]
+#   trust_level = "trusted"
+# directly to this file after stow symlinks it in — don't commit that edit.
 
-[profiles.planpro]
-model = "gpt-5-pro"
-model_provider = "azure"
-model_reasoning_effort = "medium"
-model_reasoning_summary = "detailed"
-sandbox_mode = "read-only"
-approval_policy = "on-failure"
+# ── Profiles ─────────────────────────────────────────────────────────────
+# Mirror the OpenCode agents and Claude aliases one-to-one so the same job
+# feels the same regardless of which tool you reach for.
+#
+# Each profile is its own file — code.config.toml, codex.config.toml,
+# plan.config.toml, review.config.toml, quick.config.toml, all stowed
+# alongside this one — not a [profiles.<name>] table in here. Confirmed
+# against the real, currently-published codex-cli (0.151.0): `--profile
+# <name>` layers `$CODEX_HOME/<name>.config.toml` on top of this file, and
+# refuses to run at all if a [profiles.<name>] table with that same name
+# also exists here ("legacy" config, per its own error) — a [profiles.*]
+# table was the documented mechanism when this file was first written, but
+# it's since been superseded. Verified with `codex --profile <name> exec`
+# against each file below before landing this.
 
-[profiles.review]
-model = "gpt-5"
-model_provider = "azure"
-model_reasoning_effort = "medium"
-model_reasoning_summary = "detailed"
-sandbox_mode = "read-only"
-approval_policy = "on-failure"
-
-[projects."/home/rahulnakmol/.dotfiles"]
-trust_level = "trusted"
+# ── MCP servers ──────────────────────────────────────────────────────────
 
 [mcp_servers.context7]
 command = "npx"
-args = ["-y", "@upstash/context7-mcp", "--api-key", "${CONTEXT7_API_KEY}"]
+args = ["-y", "@upstash/context7-mcp"]
+# TOML does not interpolate ${...} in strings — the old
+# args = [..., "--api-key", "${CONTEXT7_API_KEY}"] sent that literal text,
+# not the environment variable's value. `env` has the identical trap (it
+# sets a LITERAL value, not a reference) — env_vars is the actual
+# propagate-this-name-from-the-real-environment mechanism.
+env_vars = ["CONTEXT7_API_KEY"]
 
 [mcp_servers.figma]
 url = "https://mcp.figma.com/mcp"
@@ -76,12 +88,17 @@ args = ["@playwright/mcp@latest"]
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-sequential-thinking"]
 
-[mcp.github]
+[mcp_servers.github]
+# Was [mcp.github] — wrong table, never loaded. bearer_token_env_var is the
+# real mechanism for auth headers; the old inline
+# Authorization = "Bearer ${GITHUB_PAT}" had the same interpolation bug as
+# context7's args above, sending the literal string.
 url = "https://api.githubcopilot.com/mcp/"
+bearer_token_env_var = "GITHUB_PAT"
 
-[mcp.github.headers]
-Authorization = "Bearer ${GITHUB_PAT}"
-
-[mcp.azure]
+[mcp_servers.azure]
+# Was [mcp.azure] — same wrong-table bug. Kept (not removed with the model
+# provider above): this manages Azure *resources* via the az/azd aliases,
+# unrelated to which model Codex itself runs on.
 command = "npx"
 args = ["-y", "@azure/mcp@latest", "server", "start"]

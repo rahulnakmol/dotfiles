@@ -1,0 +1,19 @@
+# skills.manifest.yaml — install targets, not skill content
+# Run: ./scripts/bootstrap-skills.sh
+
+first_party:
+  - repo: rahulnakmol/skills
+    path: ${XDG_DATA_HOME:-~/.local/share}/skills
+    install:
+      - npx skills@latest add rahulnakmol/skills
+      - $SKILLS_REPO/scripts/link-skills.sh
+      - $SKILLS_REPO/scripts/install-adapters.sh
+      - gh skill install rahulnakmol/skills orchestrate --agent copilot --scope user || true
+
+third_party:
+  - repo: mattpocock/skills
+    install:
+      - npx skills@latest add mattpocock/skills --skill=setup-matt-pocock-skills
+  - repo: caveman/cavecrew
+    install:
+      - claude plugins install caveman || true

@@ -15,11 +15,11 @@ alias ghr='cd $HOME/Developer/Github'
 alias dotfiles='cd $HOME/.dotfiles'
 
 # Aliases for ls
-alias ls='eza -l --color=auto'
-alias l='eza -F --color=auto'
+alias ls='eza -l --icons=auto --color=auto'
+alias l='eza -F --icons=auto --color=auto'
 alias ll='ls -alF --color=auto'
 alias la='ls -A --color=auto'
-alias lar='ls -laRt changed'
+alias lar='eza -laR --icons=auto --sort changed'
 
 # Aliases for git
 alias gs='git status'
@@ -35,6 +35,10 @@ alias gb!='git blame'
 alias glog='git log --oneline --decorate --all --graph'
 alias gdiff='git diff'
 alias gdiffs='git diff --staged'
+
+# Commit signing — configure per-machine, on demand (scripts/setup-signing-key.sh)
+alias gsign='$HOME/.dotfiles/scripts/setup-signing-key.sh'
+alias gsigns='$HOME/.dotfiles/scripts/setup-signing-key.sh --status'
 
 # Aliases for GitHub CLI
 alias ghl='gh auth login --hostname github.com'
@@ -171,6 +175,7 @@ alias azdt='azd template list'
 
 # Aliases for docker/podman (podman as drop-in replacement)
 alias docker='podman'
+alias docker-compose='podman compose'
 alias d='podman'
 alias dps='podman ps'
 alias dpsa='podman ps -a'

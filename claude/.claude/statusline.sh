@@ -12,7 +12,10 @@ C_GREEN=$'\033[38;2;166;218;149m'
 C_RED=$'\033[38;2;237;135;150m'
 C_BLUE=$'\033[38;2;138;173;244m'
 C_LAVENDER=$'\033[38;2;183;189;248m'
+# Full Catppuccin palette kept for reference, like C_MAUVE/C_RED below (each used once too).
+# shellcheck disable=SC2034
 C_TEXT=$'\033[38;2;202;211;245m'
+# shellcheck disable=SC2034
 C_SUBTEXT=$'\033[38;2;184;192;224m'
 C_SURFACE=$'\033[38;2;91;96;120m'
 

@@ -230,6 +230,21 @@ function applyCodex() {
   const lines = original.split("\n");
   const startIdx = lines.indexOf(CODEX_BEGIN);
   const endIdx = lines.indexOf(CODEX_END);
+
+  // A [shell_environment_policy] table that exists WITHOUT the markers is
+  // hand-authored (or from before this script managed it) — blindly
+  // appending a second one here produced a real "Cannot declare
+  // (shell_environment_policy) twice" TOML parse error, caught only by
+  // actually parsing the file after a re-run, not by this script's own
+  // string-based checks. Skip rather than corrupt it.
+  if (startIdx === -1 && /^\[shell_environment_policy\]\s*$/m.test(original)) {
+    console.log(
+      `skip codex: ${rel} already has an unmanaged [shell_environment_policy] table — ` +
+        `remove it or add the ${CODEX_BEGIN} / ${CODEX_END} markers around it to let this script manage it`,
+    );
+    return;
+  }
+
   const before =
     startIdx === -1 ? lines : lines.slice(0, startIdx);
   const after =

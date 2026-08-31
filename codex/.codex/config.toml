@@ -27,9 +27,11 @@ network_access = false
 exclude_slash_tmp = false
 writable_roots = []
 
+# BEGIN agent-policy (managed by apply-agent-policy.mjs)
 [shell_environment_policy]
-exclude = ["AWS_*", "AZURE_*", "GCP_*", "GOOGLE_*", "GITHUB_*", "OP_*", "DIGITALOCEAN_*", "NETLIFY_*", "HEROKU_*", "VAULT_*"]
+exclude = ["AWS_*","AZURE_*","GCP_*","GOOGLE_*","GITHUB_*","OP_*","DIGITALOCEAN_*","NETLIFY_*","HEROKU_*","VAULT_*"]
 ignore_default_excludes = false
+# END agent-policy
 
 # [projects."<absolute-path>"] trust entries deliberately NOT committed here.
 # TOML never does variable expansion — table keys are as literal as values,

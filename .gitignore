@@ -30,6 +30,34 @@ claude/.claude/*
 !claude/.claude/rules/
 !claude/.claude/rules/**
 
+# Cursor — ship user rules + ignore-anchor files only
+# (plans, skills, plugins cache, projects, and CLI-generated state stay
+# local: cli-config.json / permissions.json are written by
+# `node scripts/apply-agent-policy.mjs`, not committed)
+cursor/.cursor/*
+!cursor/.cursor/rules/
+!cursor/.cursor/rules/**
+!cursor/.cursor/.gitignore
+!cursor/.cursor/plugins/
+cursor/.cursor/plugins/*
+!cursor/.cursor/plugins/.gitignore
+!cursor/.cursor/projects/
+cursor/.cursor/projects/*
+!cursor/.cursor/projects/.gitignore
+!cursor/.cursor/skills-cursor/
+cursor/.cursor/skills-cursor/*
+!cursor/.cursor/skills-cursor/.gitignore
+cursor/.cursor/plans/
+cursor/.cursor/skills/
+cursor/.cursor/commands/
+cursor/.cursor/agents/
+cursor/.cursor/cli-config.json
+cursor/.cursor/permissions.json
+cursor/.cursor/argv.json
+cursor/.cursor/agent-cli-state.json
+cursor/.cursor/statsig-cache.json
+cursor/.cursor/.cursorignore
+
 # Module-specific ephemeral data
 nvim/.config/nvim/lazy-lock.json
 **/zsh/*.local

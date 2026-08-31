@@ -18,6 +18,10 @@ codex login   # choose "Sign in with ChatGPT"
 `preferred_auth_method = "chatgpt"` — the documented default, set explicitly because a machine
 that previously used an API key would otherwise have that take precedence when both are present.
 
+Guided, either mode: `./scripts/setup-model-provider.sh --codex-chatgpt` runs `codex login` for
+you — the script itself never sees the OAuth credential, the same way `claude setup-token` keeps
+its own browser flow self-contained. See "Alternative: Azure AI Foundry" below for the other mode.
+
 ## Defaults
 
 | Setting | Value |
@@ -57,6 +61,28 @@ table and never actually loaded.
 | sequential-thinking | npx (`@modelcontextprotocol/server-sequential-thinking`) |
 | github | URL, `bearer_token_env_var = "GITHUB_PAT"` |
 | azure | npx (`@azure/mcp@latest`) — manages Azure *resources* via the `az`/`azd` aliases; unrelated to the model provider above |
+
+## Alternative: Azure AI Foundry
+
+ChatGPT Pro auth is the default and stays untouched by this. To add an Azure AI Foundry endpoint
+as an **additional**, opt-in profile — the `code`/`codex`/`plan`/`review`/`quick` profiles keep
+using ChatGPT auth either way:
+
+```bash
+./scripts/setup-model-provider.sh --codex-azure --resource-name=my-resource --deployment=gpt-5
+codex --profile azure exec "reply OK"   # use it
+```
+
+This writes a marker-guarded `[model_providers.azure]` + `[profiles.azure]` block into
+`~/.codex/config.toml` — never into anything this repo tracks. The key itself is never written to
+that file: only `env_key = "AZURE_OPENAI_API_KEY"`, the variable *name*, following Codex's own
+documented mechanism for keeping secrets out of config. The script resolves the actual key from an
+already-exported `AZURE_OPENAI_API_KEY`, a 1Password read, or a hidden prompt — never a CLI flag —
+and, if it has to ask, persists it only to `~/.zshrc.local` (gitignored, per-machine). Re-running
+the command is safe: the managed block is replaced in place, not duplicated, and a pre-existing
+*unmanaged* `[model_providers.azure]` block is left alone with an explanatory error rather than
+corrupted. `./scripts/setup-model-provider.sh --status` reports what's configured without ever
+printing the key. See `scripts/setup-model-provider.sh --help` for the full safety rationale.
 
 ## Project trust
 

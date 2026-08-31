@@ -52,7 +52,7 @@ Most workflows and aliases depend on these.
 | `gh` | GitHub CLI (PRs, issues, repo sync) | `g*` aliases, `gh` module |
 | `ghostty` | GPU-accelerated terminal | `ghostty` module |
 | `1password` | SSH agent, commit signing | `git`, `ssh`, `1password` modules |
-| `op` | 1Password CLI | Git commit signing (`op-ssh-sign`) |
+| `op` | 1Password CLI | Git commit signing (`op-ssh-sign`); optional key source for `scripts/setup-model-provider.sh` |
 | `Mononoki Nerd Font` | Glyphs for prompt, editor, tmux | `ghostty`, `starship`, `nvim` |
 
 ### Install

@@ -36,6 +36,25 @@ Each agent has a custom system prompt tailored to its role.
 | Theme | catppuccin |
 | Scroll acceleration | enabled |
 
+## Alternative: Azure AI Foundry
+
+The default `opencode` (Zen) provider stays untouched by this. To add an Azure AI Foundry endpoint
+as an **additional**, opt-in provider:
+
+```bash
+./scripts/setup-model-provider.sh --opencode-azure --resource-name=my-resource --deployment=gpt-5
+opencode run -m azure/gpt-5 "reply OK"   # use it
+```
+
+This merges a marker-guarded `provider.azure` block into `opencode.json` using the
+`@ai-sdk/azure` package and OpenCode's own `{env:AZURE_OPENAI_API_KEY}` templating — the committed
+file only ever holds that reference, never the literal key. The script resolves the key the same
+way as the Codex flow above (already-exported env var → 1Password → hidden prompt, never a CLI
+flag), persisting it only to `~/.zshrc.local` if it has to ask. Re-running is idempotent, and a
+pre-existing unmanaged `provider.azure` entry is left alone rather than overwritten. See
+`scripts/setup-model-provider.sh --help` and `docs/modules/codex.md` for the full safety design,
+which is shared across both tools.
+
 ## Model Update Script
 
 `update-models.sh` fetches the latest model catalog from `https://opencode.ai/zen/v1/models` and updates `opencode.json` agent model IDs using version-sorted selection.

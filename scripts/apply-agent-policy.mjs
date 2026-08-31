@@ -51,9 +51,15 @@ function claudeDeny() {
 
 function ensureWarningSection(existing, marker) {
   if (existing.includes(marker)) {
+    // NOT the "m" flag — with it, `$` matches end-of-LINE, not end-of-string.
+    // Combined with the non-greedy [\s\S]*?, that collapses the match to
+    // almost nothing (stops at the first line break after the heading), and
+    // the warning gets INSERTED rather than replacing the section through to
+    // EOF — confirmed against a real file with no heading after "## Secrets
+    // ...": it duplicated the trailing paragraphs instead of replacing them.
+    // Dropping "m" makes `$` mean true end-of-string, as the comment above always intended.
     const re = new RegExp(
       `##\\s+${marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[\\s\\S]*?(?=\\n##\\s+|$)`,
-      "m",
     );
     if (re.test(existing)) {
       return existing.replace(re, warning + "\n\n").replace(/\n{3,}/g, "\n\n");

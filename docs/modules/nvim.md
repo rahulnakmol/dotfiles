@@ -18,17 +18,15 @@ Enabled via `lazyvim.json`:
 
 **AI**: claudecode
 
-**Languages**: cmake, docker, dotnet, git, go, json, markdown, python, rust, sql, svelte, tailwind, terraform, toml, typescript, yaml
+**Languages**: docker, dotnet, go, helm, json, markdown, Python, rust, SQL, Tailwind, terraform, toml, typescript, yaml
 
-**Editor**: fzf, neo-tree, outline, telescope
+**Editor**: Snacks picker and explorer
 
-**Formatting**: biome, black
+**Formatting**: Prettier, only for repositories with a Prettier configuration
 
-**LSP**: neoconf
+**API tooling**: REST and GraphQL requests through Kulala
 
-**Utilities**: dot, gh, gitui, mini-hipatterns, project
-
-**Other**: dap.core, test.core, coding.yanky
+**Other**: dap.core, test.core
 
 ## Colorscheme
 
@@ -45,9 +43,48 @@ Catppuccin (`catppuccin/nvim`) set as the default via LazyVim opts.
 ## Plugin Management
 
 - Lazy.nvim auto-bootstraps from git on first run
+- `lazy-lock.json` pins plugin revisions across machines
 - Plugin update checker enabled (silent, no notifications)
 - Disabled runtime plugins: gzip, tarPlugin, tohtml, tutor, zipPlugin
 
+Run the deterministic bootstrap after deploying the module:
+
+```bash
+~/.dotfiles/scripts/bootstrap-nvim.sh
+```
+
+It restores locked plugins, synchronously installs the reviewed Mason toolset, installs every
+configured Tree-sitter parser, retries one transient Mason failure, and exits nonzero if required
+tools remain unavailable.
+
+Framework and formatter extras such as Svelte, Prisma, Biome, Oxc, CMake, and Black are intentionally
+repository-specific rather than part of the global baseline. Python uses Pyright and Ruff; no global
+pip or Black installation is required. SQL uses SQLFluff and Dadbod; database-specific clients remain
+external dependencies.
+
+## Bun and Turborepo
+
+The TypeScript extra uses VTSLS for Bun workspaces and Turborepo monorepos. Project-local `tsconfig`
+and package boundaries remain the source of truth.
+
+| Key | Action |
+| --- | --- |
+| `<leader>Br` | Run the current file with Bun |
+| `<leader>Bt` | Run project tests with `bun test` |
+| `<leader>BT` | Test the current file |
+| `<leader>Bs` | Prompt for and run a package script |
+| `<leader>Bf` | Run a script through a Bun workspace filter |
+| `<leader>Bu` | Run a Turborepo task through `bunx turbo` |
+
+LazyVim's JavaScript DAP configuration remains Node-specific. Bun uses the WebKit Inspector Protocol,
+so the configuration does not pretend that `pwa-node` is a supported Bun debugger. Use Bun's web
+debugger for interactive Bun debugging until a stable standalone Bun DAP adapter is available.
+
 ## Dependencies
 
-Neovim (0.9+), git, a Nerd Font.
+Neovim 0.11.2+, git, a C compiler, Node.js, Go, the .NET SDK, Rust with rust-analyzer, and a Nerd Font.
+For a rustup minimal profile, install the required component explicitly:
+
+```bash
+rustup component add rust-analyzer
+```

@@ -37,7 +37,7 @@ jobs:
             claude/.claude/statusline.sh opencode/.config/opencode/update-models.sh
 
       - name: Lint Lua configs (nvim + wezterm)
-        run: stylua --check nvim/.config/nvim wezterm/.config/wezterm
+        run: stylua --check nvim/.config/nvim scripts/nvim wezterm/.config/wezterm
 
       - name: tmux smoke test
         run: |

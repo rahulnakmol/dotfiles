@@ -93,7 +93,6 @@ opencode/.config/opencode/*.bak
 skills-lock.json
 
 # Module-specific ephemeral data
-nvim/.config/nvim/lazy-lock.json
 **/zsh/*.local
 **/git/*.local
 **/tmux/plugins/*

@@ -28,6 +28,75 @@ Enabled via `lazyvim.json`:
 
 **Other**: dap.core, test.core
 
+## Keyboard-first workflow
+
+`<leader>` is `Space`. Press `<leader>sk` at any time to search every active keymap.
+
+### Files, search, buffers, and windows
+
+| Key | Action |
+| --- | --- |
+| `<leader><space>` / `<leader>ff` | Find files from the project root |
+| `<leader>fg` | Find Git-tracked files |
+| `<leader>/` / `<leader>sg` | Grep the project |
+| `<leader>sw` | Search the word or visual selection |
+| `<leader>e` | Toggle Snacks Explorer |
+| `<leader>,` | Pick an open buffer |
+| `Shift-H` / `Shift-L` | Previous / next buffer |
+| `<leader>bd` | Delete the current buffer |
+| `Ctrl-H/J/K/L` | Move between Neovim windows |
+| `<leader>-` / `<leader>|` | Split below / right |
+| `<leader>wm` | Toggle window zoom |
+
+### Code and diagnostics
+
+| Key | Action |
+| --- | --- |
+| `gd` / `gr` | Go to definition / references |
+| `gI` / `gy` | Go to implementation / type definition |
+| `K` / `gK` | Hover / signature help |
+| `<leader>ca` | Code action |
+| `<leader>cr` | Rename symbol |
+| `<leader>cR` | Rename file |
+| `<leader>co` | Organize imports |
+| `<leader>cf` | Format |
+| `<leader>cd` | Show line diagnostics |
+| `]d` / `[d` | Next / previous diagnostic |
+| `]e` / `[e` | Next / previous error |
+| `<leader>xx` | Open diagnostics in Trouble |
+
+### Git, tests, and debugging
+
+| Key | Action |
+| --- | --- |
+| `<leader>gg` | Open LazyGit at the project root |
+| `<leader>gs` / `<leader>gd` / `<leader>gl` | Git status / diff / log |
+| `]h` / `[h` | Next / previous Git hunk |
+| `<leader>tr` / `<leader>tt` | Run nearest test / test file |
+| `<leader>tl` / `<leader>to` | Run last test / show output |
+| `<leader>ts` / `<leader>tw` | Toggle test summary / watch |
+| `<leader>td` | Debug nearest test |
+| `<leader>db` | Toggle breakpoint |
+| `<leader>dc` | Run or continue debugger |
+| `<leader>di` / `<leader>dO` / `<leader>do` | Step into / over / out |
+| `<leader>du` | Toggle DAP UI |
+| `<leader>dt` | Terminate debug session |
+
+### Claude, Python, SQL, and REST
+
+| Key | Action |
+| --- | --- |
+| `<leader>ac` / `<leader>af` | Toggle / focus Claude Code |
+| `<leader>ar` | Resume Claude Code |
+| `<leader>ab` | Add current buffer to Claude |
+| `<leader>as` | Send visual selection to Claude |
+| `<leader>aa` / `<leader>ad` | Accept / deny Claude diff |
+| `<leader>cv` | Select Python virtual environment |
+| `<leader>D` | Toggle the SQL database UI |
+| `<leader>Rs` / `<leader>Rr` | Send / replay an HTTP request |
+| `<leader>Rn` / `<leader>Rp` | Next / previous request |
+| `<leader>Rc` | Copy request as cURL |
+
 ## Colorscheme
 
 Catppuccin (`catppuccin/nvim`) set as the default via LazyVim opts.

@@ -29,10 +29,18 @@ npx skills add herdrdev/herdr --skill herdr -g
 
 The prefix is `C-a`, matching this repository's tmux module.
 
+### Daily muscle memory
+
 | Key | Action |
 | --- | --- |
 | `C-a ?` | Show all active keybindings |
 | `C-a q` | Detach while panes keep running |
+| `C-a w` | Open the workspace picker |
+| `C-a g` | Open the session navigator |
+| `C-a Shift-G` | Create a Git worktree workspace |
+| `C-a Shift-1..9` | Jump to workspace 1–9 |
+| `C-a Alt-1..9` | Jump to agent 1–9 |
+| `M-Shift-Up` / `M-Shift-Down` | Previous / next agent |
 | `C-a c` | New tab |
 | `C-a '` | Split below |
 | `C-a \` | Split right |
@@ -46,6 +54,28 @@ The prefix is `C-a`, matching this repository's tmux module.
 | `C-a Shift-O` | OpenCode popup |
 | `C-a Shift-D` | Codex popup |
 | `C-a Shift-U` | Cursor Agent popup |
+
+Herdr is mouse-capable, but the keyboard-first loop is: jump to an agent, inspect or answer it,
+then move to the next agent requiring attention. The Agents sidebar sorts blocked and newly completed
+work first.
+
+The Attention Inbox plugin will use `C-a i` after it is published and installed. Until then, that
+shortcut is intentionally unbound.
+
+### Agent control from a pane
+
+Agents with Herdr's release-matched skill can coordinate the current session:
+
+```bash
+herdr agent list
+herdr pane split --current --direction right --cwd "$PWD" --no-focus
+herdr agent start reviewer --kind codex --pane <pane-id>
+herdr agent prompt reviewer "Review the current diff." --wait
+herdr agent attach reviewer
+```
+
+Use `herdr agent attach <name>` for a focused, low-bandwidth view of one agent, especially from a
+phone or Mosh session.
 
 ## Remote use
 

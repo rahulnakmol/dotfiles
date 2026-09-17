@@ -37,6 +37,7 @@ Full list with per-distro install commands: [docs/guides/dependencies.md](docs/g
 | `tmux` | `C-a` prefix, vim-style navigation, session persistence, AI tool popups | [details](docs/modules/tmux.md) |
 | `herdr` | Agent-aware persistent terminal workspaces | [details](docs/modules/herdr.md) |
 | `nvim` | LazyVim bootstrap with Catppuccin theme | [details](docs/modules/nvim.md) |
+| T3 Code | Machine-local application state; not a Stow module | [policy](docs/modules/t3.md) |
 | `starship` | Prompt with Catppuccin palette and Nerd Font glyphs | [details](docs/modules/starship.md) |
 | `git` | User identity; commit signing configured per machine, on demand | [details](docs/modules/git.md) |
 | `gh` | GitHub CLI, 27 workflow aliases | [details](docs/modules/gh.md) |

@@ -59,6 +59,16 @@ Herdr is mouse-capable, but the keyboard-first loop is: jump to an agent, inspec
 then move to the next agent requiring attention. The Agents sidebar sorts blocked and newly completed
 work first.
 
+Agent names also have stable Catppuccin colors while state icons retain their semantic urgency color:
+
+| Agent | Name color |
+| --- | --- |
+| Claude | Peach |
+| Codex | Green |
+| OpenCode | Blue |
+| Cursor | Mauve |
+| Amp | Yellow |
+
 The Attention Inbox plugin will use `C-a i` after it is published and installed. Until then, that
 shortcut is intentionally unbound.
 

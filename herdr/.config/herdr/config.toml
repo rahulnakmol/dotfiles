@@ -42,6 +42,28 @@ rows = [
   ["workspace", "tab"],
 ]
 
+[ui.sidebar.agents.rows_by_agent]
+claude = [
+  ["state_icon", { token = "agent", fg = "#f5a97f", bold = true }, "state_text"],
+  ["workspace", "tab"],
+]
+codex = [
+  ["state_icon", { token = "agent", fg = "#a6da95", bold = true }, "state_text"],
+  ["workspace", "tab"],
+]
+opencode = [
+  ["state_icon", { token = "agent", fg = "#8aadf4", bold = true }, "state_text"],
+  ["workspace", "tab"],
+]
+cursor = [
+  ["state_icon", { token = "agent", fg = "#c6a0f6", bold = true }, "state_text"],
+  ["workspace", "tab"],
+]
+amp = [
+  ["state_icon", { token = "agent", fg = "#eed49f", bold = true }, "state_text"],
+  ["workspace", "tab"],
+]
+
 [ui.sidebar.spaces]
 rows = [
   ["state_icon", "workspace"],

@@ -29,8 +29,18 @@ fi
 # alias, or ZLE initialization. Keep non-interactive shells quiet and deterministic.
 [[ -o interactive ]] || return
 
-autoload -Uz compinit
-compinit
+# zsh-autocomplete owns compinit and must load before compdef, custom widgets,
+# autosuggestions, and syntax highlighting.
+for plugin in \
+  "$HOME/.local/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh" \
+  "${HOMEBREW_PREFIX:-/nonexistent}/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh" \
+  "/usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh"; do
+  if [[ -f "$plugin" ]]; then
+    source "$plugin"
+    break
+  fi
+done
+unset plugin
 
 # Source modular configs (00-distro.zsh loads first due to sort order)
 for rcfile in "$HOME"/.zshrc.d/*.{zsh,sh}(N.); do
@@ -44,7 +54,7 @@ eval "$(zoxide init --cmd cd zsh)"
 
 # fzf — cache generated config for faster startup
 _fzf_cache="$HOME/.cache/fzf-zsh.zsh"
-if [[ ! -f "$_fzf_cache" || "$(command -v fzf)" -nt "$_fzf_cache" ]]; then
+if [[ ! -s "$_fzf_cache" || "$(command -v fzf)" -nt "$_fzf_cache" ]]; then
   mkdir -p "$HOME/.cache"
   fzf --zsh > "$_fzf_cache" 2>/dev/null
 fi
@@ -54,13 +64,13 @@ unset _fzf_cache
 # Local overrides (machine-specific, not committed)
 [[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
 
-# ZSH plugins — check brew prefix first (Ubuntu), then system paths (Fedora/openSUSE)
+# ZSH line-editor plugins. Autosuggestions loads after Autocomplete; syntax
+# highlighting must be last so it observes every widget and redraw hook.
 () {
-  local dirs=("${HOMEBREW_PREFIX:-/nonexistent}/share" "/usr/share")
+  local dirs=("$HOME/.local/share/zsh/plugins" "${HOMEBREW_PREFIX:-/nonexistent}/share" "/usr/share")
   local plugins=(
-    "zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-    "zsh-autocomplete/zsh-autocomplete.plugin.zsh"
     "zsh-autosuggestions/zsh-autosuggestions.zsh"
+    "zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
   )
   local plugin dir
   for plugin in "${plugins[@]}"; do

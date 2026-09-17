@@ -40,9 +40,23 @@ Zsh shell configuration with modular sourcing, multi-distro package manager alia
 
 Loaded from Homebrew `share/` or system `/usr/share/`:
 
-- `zsh-syntax-highlighting`
-- `zsh-autocomplete`
-- `zsh-autosuggestions`
+- `zsh-autocomplete` — asynchronous type-ahead completion and completion UI
+- `zsh-autosuggestions` — history-based inline suggestions
+- `zsh-syntax-highlighting` — command validity and shell syntax coloring
+- `zsh-completions` — additional command-specific completion definitions
+
+Load order is intentional: Autocomplete initializes completion before custom widgets, Autosuggestions
+loads afterward, and Syntax Highlighting loads last so it observes every line-editor hook.
+
+On shared Homebrew installations, run:
+
+```bash
+~/.dotfiles/scripts/sync-zsh-completions.zsh
+```
+
+This copies completion definitions and plugin code into user-owned directories, then rebuilds the
+completion dump. Homebrew remains the version source, while Zsh executes private synchronized copies
+that satisfy `compaudit` instead of trusting a third-user-owned shared completion tree.
 
 ## Notable Alias Groups
 
@@ -53,7 +67,7 @@ Loaded from Homebrew `share/` or system `/usr/share/`:
 
 ## Dependencies
 
-Homebrew (Linux), starship, zoxide, fzf, eza, bat, zsh plugins (from brew or system packages).
+Homebrew (Linux), starship, zoxide, fzf, eza, bat, and the four focused Zsh extensions above.
 
 ## Local Overrides
 

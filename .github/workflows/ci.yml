@@ -30,6 +30,7 @@ jobs:
           zsh -n zsh/.zshrc
           zsh -n zsh/.zprofile
           for f in zsh/.zshrc.d/*.zsh; do zsh -n "$f"; done
+          zsh -n scripts/sync-zsh-completions.zsh
 
       - name: Shellcheck every shell script
         run: |

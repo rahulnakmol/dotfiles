@@ -36,7 +36,8 @@ sudo dnf install git stow zsh tmux neovim eza bat fd-find ripgrep fzf zoxide sta
 
 # Ubuntu / Debian (Homebrew recommended for latest versions of dev tools)
 sudo apt install git stow zsh tmux curl jq
-brew install eza bat fd ripgrep fzf zoxide starship neovim
+brew install eza bat fd ripgrep fzf zoxide starship neovim \
+  zsh-autocomplete zsh-autosuggestions zsh-syntax-highlighting zsh-completions
 ```
 
 > **Note:** On Ubuntu, `neovim` from apt is often too old for LazyVim. Homebrew or the Neovim PPA is recommended.
@@ -275,5 +276,6 @@ sudo dnf install git stow zsh tmux neovim eza bat fd-find ripgrep fzf zoxide sta
 
 # Ubuntu / Debian
 sudo apt install git stow zsh tmux curl jq gh openssh-client podman
-brew install eza bat fd ripgrep fzf zoxide starship neovim
+brew install eza bat fd ripgrep fzf zoxide starship neovim \
+  zsh-autocomplete zsh-autosuggestions zsh-syntax-highlighting zsh-completions
 ```

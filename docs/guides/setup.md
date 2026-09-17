@@ -19,6 +19,7 @@ sudo dnf install git stow zsh tmux neovim eza bat fd-find ripgrep fzf zoxide sta
 sudo apt install git stow zsh tmux curl jq gh
 brew install eza bat fd ripgrep fzf zoxide starship neovim
 brew install herdr
+brew install zsh-autocomplete zsh-autosuggestions zsh-syntax-highlighting zsh-completions
 ```
 
 Install [Mononoki Nerd Font](https://www.nerdfonts.com/font-downloads) and configure your terminal to use it.
@@ -45,6 +46,7 @@ Stow creates symlinks from each module directory into `$HOME`. Deploy in this or
 ```bash
 # Step 1: Shell foundation
 stow zsh
+./scripts/sync-zsh-completions.zsh
 
 # Step 2: Core tools
 stow git ssh starship bat

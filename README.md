@@ -16,12 +16,20 @@ stow zsh tmux git  # deploy selected modules
 
 Re-run `stow <module>` after pulling changes to keep `$HOME` in sync.
 
+On Homebrew-based systems, install and synchronize the focused Zsh extension set:
+
+```bash
+brew install zsh-autocomplete zsh-autosuggestions zsh-syntax-highlighting zsh-completions
+~/.dotfiles/scripts/sync-zsh-completions.zsh
+```
+
 ## Prerequisites
 
 | Category | Tools |
 |----------|-------|
 | Core | `git`, `stow`, `zsh`, `curl`, `jq` |
 | CLI | `eza`, `bat`, `fd`, `ripgrep`, `fzf`, `zoxide` |
+| Zsh UX | `zsh-autocomplete`, `zsh-autosuggestions`, `zsh-syntax-highlighting`, `zsh-completions` |
 | Terminal | [Ghostty](https://ghostty.org) (Linux), [WezTerm](https://wezfurlong.org/wezterm/) (WSL), [tmux](https://github.com/tmux/tmux), [Herdr](https://herdr.dev), [Starship](https://starship.rs) |
 | Editor | [Neovim](https://neovim.io) 0.10+ (LazyVim) |
 | Font | [Mononoki Nerd Font](https://www.nerdfonts.com) |

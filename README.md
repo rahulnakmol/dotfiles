@@ -22,7 +22,7 @@ Re-run `stow <module>` after pulling changes to keep `$HOME` in sync.
 |----------|-------|
 | Core | `git`, `stow`, `zsh`, `curl`, `jq` |
 | CLI | `eza`, `bat`, `fd`, `ripgrep`, `fzf`, `zoxide` |
-| Terminal | [Ghostty](https://ghostty.org) (Linux), [WezTerm](https://wezfurlong.org/wezterm/) (WSL), [tmux](https://github.com/tmux/tmux), [Starship](https://starship.rs) |
+| Terminal | [Ghostty](https://ghostty.org) (Linux), [WezTerm](https://wezfurlong.org/wezterm/) (WSL), [tmux](https://github.com/tmux/tmux), [Herdr](https://herdr.dev), [Starship](https://starship.rs) |
 | Editor | [Neovim](https://neovim.io) 0.10+ (LazyVim) |
 | Font | [Mononoki Nerd Font](https://www.nerdfonts.com) |
 | Optional | [1Password](https://1password.com) (SSH agent + commit signing), [Homebrew](https://brew.sh) |
@@ -35,6 +35,7 @@ Full list with per-distro install commands: [docs/guides/dependencies.md](docs/g
 |--------|--------------------|------|
 | `zsh` | Modular shell with 120+ aliases, multi-distro + WSL support | [details](docs/modules/zsh.md) |
 | `tmux` | `C-a` prefix, vim-style navigation, session persistence, AI tool popups | [details](docs/modules/tmux.md) |
+| `herdr` | Agent-aware persistent terminal workspaces | [details](docs/modules/herdr.md) |
 | `nvim` | LazyVim bootstrap with Catppuccin theme | [details](docs/modules/nvim.md) |
 | `starship` | Prompt with Catppuccin palette and Nerd Font glyphs | [details](docs/modules/starship.md) |
 | `git` | User identity; commit signing configured per machine, on demand | [details](docs/modules/git.md) |

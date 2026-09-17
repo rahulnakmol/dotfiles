@@ -12,12 +12,25 @@ if [[ -z "$HOMEBREW_PREFIX" ]]; then
   fi
 fi
 
+# User-owned completions avoid compinit rejecting a shared, package-manager-
+# writable Homebrew tree. Provisioning populates this directory for VPS users.
+if [[ -d "$HOME/.local/share/zsh/site-functions" ]]; then
+  fpath=("$HOME/.local/share/zsh/site-functions" ${fpath:#/home/linuxbrew/.linuxbrew/share/zsh/site-functions})
+fi
+
 # Rustup — resolve from brew or system (MACHTYPE avoids uname subshell)
 if [[ -n "$HOMEBREW_PREFIX" && -d "$HOMEBREW_PREFIX/opt/rustup/bin" ]]; then
   PATH="$HOMEBREW_PREFIX/opt/rustup/bin:$PATH"
 elif [[ -d "$HOME/.rustup/toolchains/stable-${MACHTYPE}-unknown-linux-gnu/bin" ]]; then
   PATH="$HOME/.rustup/toolchains/stable-${MACHTYPE}-unknown-linux-gnu/bin:$PATH"
 fi
+
+# Services and remote commands need the toolchain PATH, not prompt, completion,
+# alias, or ZLE initialization. Keep non-interactive shells quiet and deterministic.
+[[ -o interactive ]] || return
+
+autoload -Uz compinit
+compinit
 
 # Source modular configs (00-distro.zsh loads first due to sort order)
 for rcfile in "$HOME"/.zshrc.d/*.{zsh,sh}(N.); do

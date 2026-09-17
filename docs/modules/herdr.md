@@ -1,0 +1,81 @@
+# Herdr
+
+Agent-aware persistent terminal workspaces with a tmux-familiar keymap.
+
+## Deploy
+
+```bash
+stow herdr
+herdr config check
+```
+
+Install the integrations for the agents available on the machine:
+
+```bash
+herdr integration install claude
+herdr integration install codex
+herdr integration install opencode
+herdr integration install cursor  # when Cursor Agent CLI is installed
+herdr integration status
+```
+
+Install Herdr's release-matched agent-control skill globally:
+
+```bash
+npx skills add herdrdev/herdr --skill herdr -g
+```
+
+## Keybindings
+
+The prefix is `C-a`, matching this repository's tmux module.
+
+| Key | Action |
+| --- | --- |
+| `C-a ?` | Show all active keybindings |
+| `C-a q` | Detach while panes keep running |
+| `C-a c` | New tab |
+| `C-a '` | Split below |
+| `C-a \` | Split right |
+| `M-arrows` | Move between panes |
+| `M-H` / `M-L` | Previous / next tab |
+| `C-a x` | Close pane |
+| `C-a z` | Toggle pane zoom |
+| `C-a [` | Copy mode |
+| `C-a r` | Reload configuration |
+| `C-a Shift-C` | Claude Code popup |
+| `C-a Shift-O` | OpenCode popup |
+| `C-a Shift-D` | Codex popup |
+| `C-a Shift-U` | Cursor Agent popup |
+
+## Remote use
+
+Run Herdr after connecting normally:
+
+```bash
+ssh user@host
+herdr
+```
+
+The same workflow works through Mosh:
+
+```bash
+mosh user@host
+herdr
+```
+
+For an SSH thin client that renders locally and bridges local image clipboard paste:
+
+```bash
+herdr --remote host
+```
+
+`herdr --remote` uses SSH, not Mosh.
+
+## Persistence and security
+
+- Detaching leaves shells, agents, servers, and tests running.
+- After a Herdr server or host restart, workspace/tab/pane layout returns.
+- Current official integrations can resume supported agent conversations.
+- Pane screen-history persistence is explicitly disabled because pane output can contain secrets.
+- Do not run tmux inside Herdr when agent detection matters; Herdr sees tmux rather than the nested
+  foreground agent.

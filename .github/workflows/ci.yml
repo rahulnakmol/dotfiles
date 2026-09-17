@@ -26,6 +26,7 @@ jobs:
 
       - name: Syntax-check every zsh file
         run: |
+          zsh -n zsh/.zshenv
           zsh -n zsh/.zshrc
           zsh -n zsh/.zprofile
           for f in zsh/.zshrc.d/*.zsh; do zsh -n "$f"; done
@@ -52,7 +53,7 @@ jobs:
           # claude/ stow module) that auto-discovery would try to stow
           # straight into $HOME as nonsense top-level symlinks.
           stow -n -v -t /tmp/stowtarget \
-            1password bat claude codex gh ghostty git nvim opencode \
+            1password bat claude codex gh ghostty git herdr nvim opencode \
             ssh starship tmux wezterm zsh
 
       - name: Agent policy validator

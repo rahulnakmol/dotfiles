@@ -18,6 +18,7 @@ sudo dnf install git stow zsh tmux neovim eza bat fd-find ripgrep fzf zoxide sta
 # Ubuntu / Debian
 sudo apt install git stow zsh tmux curl jq gh
 brew install eza bat fd ripgrep fzf zoxide starship neovim
+brew install herdr
 ```
 
 Install [Mononoki Nerd Font](https://www.nerdfonts.com/font-downloads) and configure your terminal to use it.
@@ -51,7 +52,7 @@ stow git ssh starship bat
 # Step 3: Terminal and editor — ghostty on native Linux, wezterm on WSL
 # (Ghostty has no Windows build; see docs/guides/wsl.md for the extra
 # symlink step WezTerm needs)
-stow tmux nvim
+stow tmux herdr nvim
 stow ghostty   # native Linux
 stow wezterm   # WSL only
 
@@ -74,7 +75,7 @@ stow -n zsh    # dry-run, shows what symlinks would be created
 To deploy everything at once (native Linux — swap `ghostty` for `wezterm` on WSL):
 
 ```bash
-stow zsh git ssh starship bat tmux ghostty nvim gh claude cursor opencode codex 1password
+stow zsh git ssh starship bat tmux herdr ghostty nvim gh claude cursor opencode codex 1password
 ```
 
 ### Renaming an existing machine's `00-distro.zsh`

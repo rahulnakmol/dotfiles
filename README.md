@@ -61,7 +61,9 @@ Full list with per-distro install commands: [docs/guides/dependencies.md](docs/g
 
 Private Akmol hosts can route the ordinary `claude`, `codex`, and `opencode` commands through the
 AI gateway without committing credentials by running `./scripts/setup-akmol-gateway.sh` once per
-user. The script keeps one protected key per OS user.
+user. The script keeps one protected key per OS user. Cursor CLI is intentionally excluded because
+it does not support a generic OpenAI-compatible provider endpoint; its API key authenticates to
+Cursor itself, not to the Akmol gateway.
 
 ## Shell aliases at a glance
 

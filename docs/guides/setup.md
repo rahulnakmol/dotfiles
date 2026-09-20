@@ -153,6 +153,10 @@ writes the key to `~/.config/akmol-gateway/client.key` with mode 0600 and create
 repository. Each run refreshes OpenCode's visible model list from the gateway's authenticated
 `/v1/models` catalog.
 
+Cursor CLI is not included: its API key and endpoint settings authenticate to Cursor's proprietary
+agent backend, not to an arbitrary OpenAI-compatible provider. Never reuse the Akmol gateway key as
+`CURSOR_API_KEY`. See [the Cursor module documentation](../modules/cursor.md#private-akmol-ai-gateway).
+
 ### Alternative Codex / OpenCode providers
 
 Codex defaults to your ChatGPT plan and OpenCode to its Zen provider — nothing to do for either.

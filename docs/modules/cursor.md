@@ -3,6 +3,20 @@
 Cursor editor rules — path-scoped guidance mirroring the Claude rules, so both tools apply the
 same conventions to the same file types.
 
+## Private Akmol AI gateway
+
+Cursor CLI is deliberately excluded from `scripts/setup-akmol-gateway.sh`. Cursor Agent
+`2026.09.15-d2fe57e` accepts `CURSOR_API_KEY` for authentication to Cursor itself and
+`CURSOR_API_ENDPOINT` for Cursor's proprietary agent service; neither setting defines an arbitrary
+OpenAI-compatible model provider. Its model catalog also comes from the authenticated Cursor
+account rather than a configurable `/v1/models` endpoint.
+
+Do not give Cursor CLI `~/.config/akmol-gateway/client.key`, set it as `CURSOR_API_KEY`, or point
+`CURSOR_API_ENDPOINT` at `aigateway.akmols.host`: those interfaces are protocol-incompatible and
+would misclassify the gateway credential as a Cursor account credential. Claude Code, Codex, and
+OpenCode are the supported gateway clients in this repository. Revisit this only if Cursor ships
+documented generic OpenAI-compatible provider support and it passes a live acceptance test.
+
 ## Key Files
 
 | File | Purpose |

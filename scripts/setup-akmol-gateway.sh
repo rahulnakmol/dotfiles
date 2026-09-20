@@ -2,6 +2,8 @@
 # Configure one per-user Akmol AI gateway key for Claude Code, Codex, and
 # OpenCode. The key is read from an existing mode-0600 file or a silent prompt;
 # it is never accepted as a CLI argument, printed, or written into this repo.
+# Cursor CLI is intentionally unsupported: its API key and endpoint configure
+# Cursor's proprietary service, not an OpenAI-compatible model provider.
 set -euo pipefail
 
 GATEWAY_URL="${AKMOL_GATEWAY_URL:-https://aigateway.akmols.host}"

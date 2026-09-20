@@ -59,6 +59,10 @@ Full list with per-distro install commands: [docs/guides/dependencies.md](docs/g
 | `codex` | 5 profiles on the ChatGPT Pro plan, mirroring Claude/OpenCode | [details](docs/modules/codex.md) |
 | `opencode` | OpenCode with pro/quick/ui agents, model auto-updater | [details](docs/modules/opencode.md) |
 
+Private Akmol hosts can route the ordinary `claude`, `codex`, and `opencode` commands through the
+AI gateway without committing credentials by running `./scripts/setup-akmol-gateway.sh` once per
+user. The script keeps one protected key per OS user and provides `*-direct` bypass commands.
+
 ## Shell aliases at a glance
 
 Aliases follow a **prefix convention** so they're predictable:

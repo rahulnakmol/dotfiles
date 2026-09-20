@@ -137,7 +137,23 @@ this machine once:
 See [docs/modules/git.md](../modules/git.md) for what each mode does, and
 [docs/guides/wsl.md](wsl.md#commit-signing-on-wsl) for the WSL-specific paths.
 
-### Codex / OpenCode model provider
+### Claude Code / Codex / OpenCode model provider
+
+To make the private Akmol AI gateway the default for all three CLIs, run this once per user:
+
+```bash
+./scripts/setup-akmol-gateway.sh
+./scripts/setup-akmol-gateway.sh --status
+```
+
+The script silently prompts for one high-entropy, gateway-registered key prefixed with the local
+username, then shares that one key across Claude Code, Codex, and OpenCode for that user only. It
+writes the key to `~/.config/akmol-gateway/client.key` with mode 0600 and creates ordinary
+`claude`, `codex`, and `opencode` launchers in `~/.local/bin`. The corresponding `*-direct`
+commands bypass the gateway and run the vendor CLI with its normal configuration. No credential is
+written into this repository.
+
+### Alternative Codex / OpenCode providers
 
 Codex defaults to your ChatGPT plan and OpenCode to its Zen provider — nothing to do for either.
 If you also want an Azure AI Foundry endpoint available (additive, not a replacement), or want a

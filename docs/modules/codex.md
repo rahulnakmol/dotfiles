@@ -3,6 +3,15 @@
 OpenAI Codex CLI configuration, running on the **ChatGPT Pro plan** — no Azure, no API key, no
 provider endpoint.
 
+## Private Akmol AI gateway
+
+On an Akmol-managed host, run `./scripts/setup-akmol-gateway.sh` once as the interactive user. It
+stores one user-specific key in `~/.config/akmol-gateway/client.key` (mode 0600), writes an isolated
+Codex configuration under `~/.config/akmol-gateway/codex`, and creates `~/.local/bin/codex` as the
+normal gateway-backed command. `codex-direct` remains available for the tracked ChatGPT-backed
+configuration. The same protected key is used by that user's Claude Code and OpenCode launchers;
+keys are never shared between OS users or committed here.
+
 ## Key Files
 
 | File | Purpose |

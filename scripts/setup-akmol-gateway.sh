@@ -98,6 +98,18 @@ else
 fi
 chmod 0600 "$KEY_FILE"
 
+models_json="$({
+  printf 'header = "Authorization: Bearer %s"\n' "$(<"$KEY_FILE")"
+  printf 'silent\nshow-error\nfail\nmax-time = 30\n'
+} | curl --config - "$GATEWAY_URL/v1/models")"
+if ! jq -e '.data | type == "array" and length > 0 and all(.[]; .id | type == "string" and length > 0)' \
+    >/dev/null <<< "$models_json"; then
+  echo "Gateway returned an invalid or empty model catalog." >&2
+  exit 1
+fi
+model_count="$(jq '[.data[].id] | unique | length' <<< "$models_json")"
+provider_models="$(jq -c '.data | map(.id) | unique | sort | map({key:., value:{}}) | from_entries' <<< "$models_json")"
+
 cat > "$CODEX_HOME/config.toml" <<EOF
 model_provider = "akmol"
 model = "gpt-6-astra"
@@ -123,6 +135,7 @@ jq -n \
   --arg base "$GATEWAY_URL/v1" \
   --arg key_file "$KEY_FILE" \
   --arg user "$USER_NAME" \
+  --argjson models "$provider_models" \
   '{
     "$schema":"https://opencode.ai/config.json",
     enabled_providers:["akmol"],
@@ -134,7 +147,7 @@ jq -n \
         apiKey:("{file:" + $key_file + "}"),
         headers:{"User-Agent":("Akmol-" + $user + "-OpenCode/1.0")}
       },
-      models:{"gpt-6-astra":{},"claude-fable-5-1":{},"grok-4.6":{}}
+      models:$models
     }},
     model:"akmol/gpt-6-astra"
   }' > "$OPENCODE_CONFIG"
@@ -177,4 +190,5 @@ if command -v herdr >/dev/null 2>&1; then
 fi
 
 echo "Configured Claude Code, Codex, and OpenCode to use $GATEWAY_URL for $USER_NAME."
+echo "OpenCode catalog: $model_count gateway models."
 status

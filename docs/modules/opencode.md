@@ -9,6 +9,8 @@ stores one user-specific key in `~/.config/akmol-gateway/client.key` (mode 0600)
 OpenCode configuration under `~/.config/akmol-gateway/opencode.json`, and creates
 `~/.local/bin/opencode` as the gateway-backed command. The same protected key is used by that
 user's Claude Code and Codex launchers; keys are never shared between OS users or committed here.
+The setup reads the authenticated gateway `/v1/models` endpoint on every run, so `opencode models
+akmol` shows the full current gateway catalog rather than a hardcoded subset.
 
 ## Key Files
 

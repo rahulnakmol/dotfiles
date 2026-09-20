@@ -150,7 +150,8 @@ The script silently prompts for one high-entropy, gateway-registered key prefixe
 username, then shares that one key across Claude Code, Codex, and OpenCode for that user only. It
 writes the key to `~/.config/akmol-gateway/client.key` with mode 0600 and creates ordinary
 `claude`, `codex`, and `opencode` launchers in `~/.local/bin`. No credential is written into this
-repository.
+repository. Each run refreshes OpenCode's visible model list from the gateway's authenticated
+`/v1/models` catalog.
 
 ### Alternative Codex / OpenCode providers
 

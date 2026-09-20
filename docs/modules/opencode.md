@@ -2,15 +2,15 @@
 
 OpenCode AI coding assistant with Zen provider, custom agents, and a model update script.
 
-## Private Akmol AI gateway
+## Private AI gateway
 
-On an Akmol-managed host, run `./scripts/setup-akmol-gateway.sh` once as the interactive user. It
-stores one user-specific key in `~/.config/akmol-gateway/client.key` (mode 0600), writes an isolated
-OpenCode configuration under `~/.config/akmol-gateway/opencode.json`, and creates
+Run `./scripts/setup-private-ai-gateway.sh` once as the interactive user. It stores the endpoint and
+one user-specific key under `~/.config/private-ai-gateway/` (mode 0600), writes an isolated OpenCode
+configuration there, and creates
 `~/.local/bin/opencode` as the gateway-backed command. The same protected key is used by that
 user's Claude Code and Codex launchers; keys are never shared between OS users or committed here.
 The setup reads the authenticated gateway `/v1/models` endpoint on every run, so `opencode models
-akmol` shows the full current gateway catalog rather than a hardcoded subset.
+private_gateway` shows the full current gateway catalog rather than a hardcoded subset.
 
 ## Key Files
 

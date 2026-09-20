@@ -13,8 +13,7 @@ if [[ -z "$HOMEBREW_PREFIX" ]]; then
 fi
 
 # Homebrew prepends its bin directory. Restore user-owned launchers to the
-# front so machine-local wrappers such as the Akmol gateway clients win while
-# their *-direct commands can still invoke the absolute vendor binaries.
+# front so machine-local wrappers such as private gateway clients win.
 PATH="$HOME/.local/bin:$PATH"
 
 # User-owned completions avoid compinit rejecting a shared, package-manager-

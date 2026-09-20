@@ -2,11 +2,11 @@
 
 Claude Code CLI configuration, status line, keybindings, and project instructions.
 
-## Private Akmol AI gateway
+## Private AI gateway
 
-On an Akmol-managed host, run `./scripts/setup-akmol-gateway.sh` once as the interactive user. It
-stores one user-specific key in `~/.config/akmol-gateway/client.key` (mode 0600), creates an
-isolated Claude state directory under `~/.config/akmol-gateway/claude`, and makes
+Run `./scripts/setup-private-ai-gateway.sh` once as the interactive user. It stores the endpoint and
+one user-specific key under `~/.config/private-ai-gateway/` (mode 0600), creates an isolated Claude
+state directory there, and makes
 `~/.local/bin/claude` the gateway-backed command. The same protected key is used by that user's
 Codex and OpenCode launchers; keys are never shared between OS users or committed here.
 

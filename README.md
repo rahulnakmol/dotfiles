@@ -59,11 +59,11 @@ Full list with per-distro install commands: [docs/guides/dependencies.md](docs/g
 | `codex` | 5 profiles on the ChatGPT Pro plan, mirroring Claude/OpenCode | [details](docs/modules/codex.md) |
 | `opencode` | OpenCode with pro/quick/ui agents, model auto-updater | [details](docs/modules/opencode.md) |
 
-Private Akmol hosts can route the ordinary `claude`, `codex`, and `opencode` commands through the
-AI gateway without committing credentials by running `./scripts/setup-akmol-gateway.sh` once per
-user. The script keeps one protected key per OS user. Cursor CLI is intentionally excluded because
+Users can route the ordinary `claude`, `codex`, and `opencode` commands through a private AI
+gateway without committing its endpoint or credentials by running
+`./scripts/setup-private-ai-gateway.sh` once per user. Cursor CLI is intentionally excluded because
 it does not support a generic OpenAI-compatible provider endpoint; its API key authenticates to
-Cursor itself, not to the Akmol gateway.
+Cursor itself, not to the private gateway.
 
 ## Shell aliases at a glance
 

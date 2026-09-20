@@ -139,23 +139,24 @@ See [docs/modules/git.md](../modules/git.md) for what each mode does, and
 
 ### Claude Code / Codex / OpenCode model provider
 
-To make the private Akmol AI gateway the default for all three CLIs, run this once per user:
+To make a private OpenAI-compatible AI gateway the default for all three CLIs, run this once per
+user:
 
 ```bash
-./scripts/setup-akmol-gateway.sh
-./scripts/setup-akmol-gateway.sh --status
+./scripts/setup-private-ai-gateway.sh
+./scripts/setup-private-ai-gateway.sh --status
 ```
 
-The script silently prompts for one high-entropy, gateway-registered key prefixed with the local
-username, then shares that one key across Claude Code, Codex, and OpenCode for that user only. It
-writes the key to `~/.config/akmol-gateway/client.key` with mode 0600 and creates ordinary
-`claude`, `codex`, and `opencode` launchers in `~/.local/bin`. No credential is written into this
-repository. Each run refreshes OpenCode's visible model list from the gateway's authenticated
-`/v1/models` catalog.
+The script prompts for the gateway's HTTPS endpoint, silently prompts for one high-entropy key, and
+asks which advertised model should be the Codex/OpenCode default. The values remain under
+`~/.config/private-ai-gateway/` with mode 0600. The key is shared across Claude Code, Codex, and
+OpenCode for that user only. Ordinary `claude`, `codex`, and `opencode` launchers are created in
+`~/.local/bin`; nothing machine-specific is written into this repository. Each run refreshes
+OpenCode's visible model list from the authenticated `/v1/models` catalog.
 
 Cursor CLI is not included: its API key and endpoint settings authenticate to Cursor's proprietary
-agent backend, not to an arbitrary OpenAI-compatible provider. Never reuse the Akmol gateway key as
-`CURSOR_API_KEY`. See [the Cursor module documentation](../modules/cursor.md#private-akmol-ai-gateway).
+agent backend, not to an arbitrary OpenAI-compatible provider. Never reuse the private gateway key
+as `CURSOR_API_KEY`. See [the Cursor module documentation](../modules/cursor.md#private-ai-gateway).
 
 ### Alternative Codex / OpenCode providers
 

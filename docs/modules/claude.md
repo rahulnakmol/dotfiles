@@ -7,9 +7,8 @@ Claude Code CLI configuration, status line, keybindings, and project instruction
 On an Akmol-managed host, run `./scripts/setup-akmol-gateway.sh` once as the interactive user. It
 stores one user-specific key in `~/.config/akmol-gateway/client.key` (mode 0600), creates an
 isolated Claude state directory under `~/.config/akmol-gateway/claude`, and makes
-`~/.local/bin/claude` the normal gateway-backed command. `claude-direct` remains available for the
-vendor CLI's normal subscription-backed configuration. The same protected key is used by that
-user's Codex and OpenCode launchers; keys are never shared between OS users or committed here.
+`~/.local/bin/claude` the gateway-backed command. The same protected key is used by that user's
+Codex and OpenCode launchers; keys are never shared between OS users or committed here.
 
 ## Key Files
 

@@ -61,7 +61,7 @@ Full list with per-distro install commands: [docs/guides/dependencies.md](docs/g
 
 Private Akmol hosts can route the ordinary `claude`, `codex`, and `opencode` commands through the
 AI gateway without committing credentials by running `./scripts/setup-akmol-gateway.sh` once per
-user. The script keeps one protected key per OS user and provides `*-direct` bypass commands.
+user. The script keeps one protected key per OS user.
 
 ## Shell aliases at a glance
 

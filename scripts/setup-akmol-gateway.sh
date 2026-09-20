@@ -52,7 +52,7 @@ status() {
     echo "gateway key: absent"
     failed=1
   fi
-  for file in claude codex opencode claude-direct codex-direct opencode-direct; do
+  for file in claude codex opencode; do
     if [[ -x "$BIN_DIR/$file" ]]; then
       printf '%-16s configured\n' "$file"
     else
@@ -164,17 +164,17 @@ printf -v opencode_body '%s\n%s' \
   "exec '$opencode_bin' \"\$@\""
 write_gateway_wrapper "$BIN_DIR/opencode" "$opencode_body"
 
-for entry in "claude:$claude_bin" "codex:$codex_bin" "opencode:$opencode_bin"; do
-  name="${entry%%:*}"
-  binary="${entry#*:}"
-  write_gateway_wrapper "$BIN_DIR/$name-direct" "exec '$binary' \"\$@\""
+for name in claude codex opencode; do
   ln -sfn "$BIN_DIR/$name" "$BIN_DIR/$name-akmol"
 done
+
+# Older revisions created direct-provider bypass commands. Remove them so the
+# gateway-backed clients are the only managed entry points.
+rm -f "$BIN_DIR/claude-direct" "$BIN_DIR/codex-direct" "$BIN_DIR/opencode-direct"
 
 if command -v herdr >/dev/null 2>&1; then
   CLAUDE_CONFIG_DIR="$CLAUDE_HOME" herdr integration install claude >/dev/null
 fi
 
 echo "Configured Claude Code, Codex, and OpenCode to use $GATEWAY_URL for $USER_NAME."
-echo "Use *-direct commands to bypass the gateway on this machine."
 status

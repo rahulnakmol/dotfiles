@@ -2,8 +2,7 @@
 # Configure one per-user private AI gateway for Claude Code, Codex, and
 # OpenCode. The HTTPS endpoint and key are read from protected local files or
 # interactive prompts; neither is accepted as a CLI argument or written here.
-# Cursor CLI is intentionally unsupported: its API key and endpoint configure
-# Cursor's proprietary service, not an OpenAI-compatible model provider.
+# Cursor desktop is independent; Cursor CLI is not part of this setup.
 set -euo pipefail
 
 CONFIG_DIR="$HOME/.config/private-ai-gateway"

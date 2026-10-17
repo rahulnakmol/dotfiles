@@ -53,7 +53,7 @@ Most workflows and aliases depend on these.
 | `gh` | GitHub CLI (PRs, issues, repo sync) | `g*` aliases, `gh` module |
 | `ghostty` | GPU-accelerated terminal | `ghostty` module |
 | `1password` | SSH agent, commit signing | `git`, `ssh`, `1password` modules |
-| `op` | 1Password CLI | Git commit signing (`op-ssh-sign`); optional key source for `scripts/setup-model-provider.sh` |
+| `op` | 1Password CLI | Git commit signing (`op-ssh-sign`) |
 | `Mononoki Nerd Font` | Glyphs for prompt, editor, tmux | `ghostty`, `starship`, `nvim` |
 
 ### Install
@@ -99,8 +99,8 @@ The tmux config and shell aliases integrate heavily with these tools.
 | Tool | Purpose | Used by |
 |------|---------|---------|
 | `claude` | Claude Code (Anthropic) | `cc*` aliases, tmux `C-a c` key table |
-| `opencode` | OpenCode (Zen provider) | `oc*` aliases, tmux `C-a o` key table |
-| `codex` | Codex (Azure OpenAI) | `codex` module, `gcx*` aliases |
+| `opencode` | OpenCode (private AI gateway) | `oc*` aliases, tmux `C-a o` key table |
+| `codex` | Codex (private AI gateway) | `codex` module, `gcx*` aliases |
 
 ### Install
 

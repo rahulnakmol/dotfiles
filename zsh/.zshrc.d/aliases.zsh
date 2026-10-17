@@ -217,7 +217,7 @@ alias ccpl='claude --model opus --permission-mode plan'                         
 alias 'cc!'='claude --model sonnet --dangerously-skip-permissions'                                                        # Sonnet autopilot — fast agentic
 alias 'cco!'='claude --model opus --dangerously-skip-permissions'                                                        # Opus autopilot — full agentic
 
-# Aliases for opencode (via Zen provider)
+# Aliases for opencode (private AI gateway launcher)
 alias oc='opencode'                                                                                                      # Launch TUI
 alias occ='opencode -c'                                                                                                  # Continue last session
 alias ocr='opencode run'                                                                                                 # Headless run (non-interactive)
@@ -229,11 +229,8 @@ alias ocsl='opencode session list'                                              
 alias ocse='opencode export'                                                                                             # Export session as JSON
 alias ocsi='opencode import'                                                                                             # Import session from JSON or share URL
 alias ocml='opencode models'                                                                                             # List available models
-alias ocli='opencode providers login'                                                                                    # Login to provider
 alias ocst='opencode stats'                                                                                              # Show usage statistics
 alias ocp='opencode --pure'                                                                              # Launch without plugins
-alias ocum='~/.config/opencode/update-models.sh'                                                                         # Update agent models to latest Zen versions
-alias ocumd='~/.config/opencode/update-models.sh --dry-run'                                                              # Dry-run model update (show changes only)
 
 # Aliases for fzf
 alias fzp="fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}' --preview-window=right:70%"

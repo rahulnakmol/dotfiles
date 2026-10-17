@@ -10,6 +10,16 @@ state directory there, and makes
 `~/.local/bin/claude` the gateway-backed command. The same protected key is used by that user's
 Codex and OpenCode launchers; keys are never shared between OS users or committed here.
 
+**Gateway-only.** The private AI gateway is the only model route. The launcher
+refuses to start without the user's `~/.config/private-ai-gateway/client.key` (mode 0600), strips
+other Anthropic, Bedrock, Vertex, and Foundry credentials, and sets
+`CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST` so settings files cannot change the endpoint or credential.
+Nonessential traffic and auto-update are off.
+
+`claude auth` and `claude setup-token` are refused. The stowed `~/.claude/settings.json` points
+`ANTHROPIC_BASE_URL` at a closed local port, so the vendor binary run directly cannot reach
+Anthropic with a subscription login or API key.
+
 ## Key Files
 
 | File | Purpose |

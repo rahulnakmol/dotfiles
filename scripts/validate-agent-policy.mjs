@@ -216,7 +216,7 @@ function checkCodex() {
   }
 
   if (/model_providers\.azure|AZURE_OPENAI_API_KEY|model_provider\s*=\s*"azure"/.test(body)) {
-    fail("codex", "Azure model provider still present — Codex runs on ChatGPT auth now");
+    fail("codex", "Azure model provider still present — Codex runs only through the private gateway");
   } else {
     ok("codex", "no Azure model-provider wiring");
   }
@@ -237,10 +237,42 @@ function checkCodex() {
   }
 }
 
+// Gateway-only policy: the stowed vendor configs must fail closed when the
+// vendor binary runs without the ~/.local/bin gateway launcher.
+function checkGatewayOnly() {
+  const sink = /^http:\/\/127\.0\.0\.1:9(\/|$)/;
+  const claude = readJson(catalog.adapters.claude.settings);
+  if (sink.test(claude.env?.ANTHROPIC_BASE_URL || "")) ok("gateway", "claude settings point ANTHROPIC_BASE_URL at the closed local sink");
+  else fail("gateway", "claude settings must set env.ANTHROPIC_BASE_URL to http://127.0.0.1:9");
+
+  const oc = readJson("opencode/.config/opencode/opencode.json");
+  const enabled = JSON.stringify(oc.enabled_providers || []);
+  if (enabled === '["private_gateway"]') ok("gateway", "opencode enables only private_gateway");
+  else fail("gateway", "opencode enabled_providers must be exactly [\"private_gateway\"]", enabled);
+  const ocModels = JSON.stringify([oc.model, oc.small_model, ...Object.values(oc.agent || {}).map((a) => a.model)]);
+  if (/"(?!private_gateway\/)[^"/]+\//.test(ocModels)) fail("gateway", "opencode references a non-gateway provider model", ocModels);
+  else ok("gateway", "opencode references no non-gateway provider model");
+
+  const codex = read("codex/.codex/config.toml");
+  const checks = [
+    [/^model_provider\s*=\s*"private_gateway"/m, 'codex model_provider = "private_gateway"'],
+    [/^forced_login_method\s*=\s*"api"/m, 'codex forced_login_method = "api"'],
+    [/^openai_base_url\s*=\s*"http:\/\/127\.0\.0\.1:9\//m, "codex openai_base_url points at the closed local sink"],
+    [/^chatgpt_base_url\s*=\s*"http:\/\/127\.0\.0\.1:9\//m, "codex chatgpt_base_url points at the closed local sink"],
+  ];
+  for (const [re, msg] of checks) (re.test(codex) ? ok : fail)("gateway", msg);
+  if (/preferred_auth_method\s*=\s*"chatgpt"|^\s*\[model_providers\./m.test(codex)) {
+    fail("gateway", "codex config still selects ChatGPT auth or defines a provider");
+  } else {
+    ok("gateway", "codex config has no ChatGPT auth or provider definitions");
+  }
+}
+
 checkClaude();
 checkCursor();
 checkOpenCode();
 checkCodex();
+checkGatewayOnly();
 
 console.log("\n=== Agent policy validation report ===\n");
 for (const f of findings) {

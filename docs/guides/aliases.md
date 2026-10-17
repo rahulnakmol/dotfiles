@@ -250,11 +250,8 @@ All `docker` commands are aliased to `podman` as a drop-in replacement (`docker-
 | `ocse` | `opencode export` | Export session as JSON |
 | `ocsi` | `opencode import` | Import session from JSON or share URL |
 | `ocml` | `opencode models` | List available models |
-| `ocli` | `opencode providers login` | Login to provider |
 | `ocst` | `opencode stats` | Show usage statistics |
 | `ocp` | `opencode --pure` | Launch without plugins |
-| `ocum` | `~/.config/opencode/update-models.sh` | Update agent models to latest Zen versions |
-| `ocumd` | `~/.config/opencode/update-models.sh --dry-run` | Dry-run model update (preview only) |
 
 ## Editors
 

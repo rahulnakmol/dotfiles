@@ -35,7 +35,7 @@ jobs:
       - name: Shellcheck every shell script
         run: |
           shellcheck zsh/.zshrc.d/*.sh scripts/*.sh scripts/git-sign-unconfigured \
-            claude/.claude/statusline.sh opencode/.config/opencode/update-models.sh
+            claude/.claude/statusline.sh
 
       - name: Lint Lua configs (nvim + wezterm)
         run: stylua --check nvim/.config/nvim scripts/nvim wezterm/.config/wezterm

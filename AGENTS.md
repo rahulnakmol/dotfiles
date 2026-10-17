@@ -37,6 +37,7 @@ dotfiles repo. Bootstrap: `./scripts/bootstrap-skills.sh` (see `skills.manifest.
 Never commit tokens or keys. `.gitignore` blocks `hosts.yml`, `.env`, SSH private keys and
 `authorized_keys`, and the credential files agent-policy's catalog names. Secrets go in 1Password
 or `~/.zshrc.local`. Commit signing is configured per machine, on demand, via
-`scripts/setup-signing-key.sh` — never a hardcoded 1Password path in the committed config. Azure
-AI Foundry / ChatGPT Pro auth for Codex and OpenCode is configured the same way, on demand, via
-`scripts/setup-model-provider.sh` — no `--api-key` flag, no secret ever written to a tracked file.
+`scripts/setup-signing-key.sh` — never a hardcoded 1Password path in the committed config.
+Claude Code, Codex, and OpenCode are gateway-only: `scripts/setup-private-ai-gateway.sh` creates
+per-user launchers that use only `~/.config/private-ai-gateway/client.key` and fail closed. Do not
+add subscription logins, direct vendor providers, or provider fallbacks to any config here.

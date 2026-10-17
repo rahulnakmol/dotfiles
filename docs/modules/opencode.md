@@ -1,6 +1,6 @@
 # opencode
 
-OpenCode AI coding assistant with Zen provider, custom agents, and a model update script.
+OpenCode AI coding assistant with custom agents. It uses only the private AI gateway provider.
 
 ## Private AI gateway
 
@@ -12,32 +12,34 @@ user's Claude Code and Codex launchers; keys are never shared between OS users o
 The setup reads the authenticated gateway `/v1/models` endpoint on every run, so `opencode models
 private_gateway` shows the full current gateway catalog rather than a hardcoded subset.
 
+**Gateway-only.** The private AI gateway is the only model route. The launcher
+refuses to start without the user's `~/.config/private-ai-gateway/client.key` (mode 0600) and
+refuses `opencode auth`. It passes the gateway config inline, the highest-precedence layer, so a
+project `opencode.json` cannot re-enable another provider or redirect the gateway one, and it
+turns off the models.dev catalog fetch. The shared stowed config also fails closed when the vendor
+binary is run directly.
+
 ## Key Files
 
 | File | Purpose |
 |------|---------|
 | `.config/opencode/opencode.json` | Main config: models, agents, provider settings |
 | `.config/opencode/tui.json` | TUI theme and scroll settings |
-| `.config/opencode/update-models.sh` | Script to fetch latest Zen model IDs and update config |
 
-## Default Models
+## Models and agents
 
-| Role | Model |
-|------|-------|
-| Primary | `opencode/claude-sonnet-4-6` |
-| Small (summarization) | `opencode/gpt-5-nano` |
+The stowed `opencode.json` enables only `private_gateway` and sets no model, so the vendor binary
+run without the launcher has no usable provider. The launcher's generated config defines that
+provider from the live gateway catalog and sets the default model chosen during setup. The
+built-in `opencode` (Zen) provider and any credentials in `opencode auth` are never enabled.
 
-Provider: `opencode` (Zen). Auto-update is disabled.
+| Agent | Purpose |
+|-------|---------|
+| `quick` | Fast, concise answers |
+| `pro` | Complex architecture, debugging, deep analysis |
+| `ui` | Frontend/UI work |
 
-## Agents
-
-| Agent | Model | Purpose |
-|-------|-------|---------|
-| `quick` | `opencode/minimax-m2.5` | Fast queries with cheap/free models |
-| `pro` | `opencode/claude-opus-4-6` | Complex architecture, debugging, deep analysis |
-| `ui` | `opencode/gemini-3.1-pro` | Frontend/UI work with multimodal support |
-
-Each agent has a custom system prompt tailored to its role.
+Each agent has a custom system prompt tailored to its role and uses the gateway default model.
 
 ## TUI Settings
 
@@ -45,43 +47,6 @@ Each agent has a custom system prompt tailored to its role.
 |---------|-------|
 | Theme | catppuccin |
 | Scroll acceleration | enabled |
-
-## Alternative: Azure AI Foundry
-
-The default `opencode` (Zen) provider stays untouched by this. To add an Azure AI Foundry endpoint
-as an **additional**, opt-in provider:
-
-```bash
-./scripts/setup-model-provider.sh --opencode-azure --resource-name=my-resource --deployment=gpt-5
-opencode run -m azure/gpt-5 "reply OK"   # use it
-```
-
-`azure` is a reserved, Models.dev-backed provider id in OpenCode's own catalog — a custom
-`npm`/`options` override on it is silently ignored by the real CLI, confirmed by testing rather
-than assumed. So the script doesn't try to override it: it only merges a marker-guarded
-`provider.azure.models.<deployment>` entry into `opencode.json`, registering the deployment name as
-a valid model, and relies on OpenCode's built-in azure provider reading the key and resource name
-straight from `AZURE_API_KEY` and `AZURE_RESOURCE_NAME` in the environment — a different variable
-name than Codex's `env_key = "AZURE_OPENAI_API_KEY"`, same underlying secret. Nothing in
-`opencode.json` ever holds the key. The script resolves it the same way as the Codex flow above
-(already-exported env var → 1Password → hidden prompt, never a CLI flag), persisting it only to
-`~/.zshrc.local` if it has to ask. Re-running is idempotent, and a pre-existing unmanaged
-`provider.azure` entry is left alone rather than overwritten. See
-`scripts/setup-model-provider.sh --help` and `docs/modules/codex.md` for the full safety design,
-which is shared across both tools.
-
-## Model Update Script
-
-`update-models.sh` fetches the latest model catalog from `https://opencode.ai/zen/v1/models` and updates `opencode.json` agent model IDs using version-sorted selection.
-
-| Flag | Behavior |
-|------|----------|
-| (none) | Updates config in-place |
-| `--dry-run` | Shows resolved models without writing |
-
-Shell aliases: `ocum` (update), `ocumd` (dry-run).
-
-The script also prints tmux keybinding hints when model IDs change, since those are hardcoded in `tmux.conf`.
 
 ## Dependencies
 

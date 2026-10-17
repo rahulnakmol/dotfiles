@@ -1,21 +1,16 @@
-# Codex config — ChatGPT Pro plan, not Azure. Sign in once with:
-#   codex login   (choose "Sign in with ChatGPT")
-# Model IDs below are gpt-5.1-codex-max, the default confirmed in Codex's
-# own docs at time of writing — but plan entitlement decides what's actually
-# reachable and sources disagree on the current default (gpt-5.1-codex-max
-# vs gpt-5.2-codex for ChatGPT-signed-in accounts). Confirm after signing in
-# with `codex --profile <name> exec "reply OK"` for each profile below and
-# adjust the model strings if a different one is actually available.
-
-model = "gpt-5.1-codex-max"
-review_model = "gpt-5.1-codex-max"
-# Default is already "openai" with no [model_providers] table needed once
-# signed in via ChatGPT — no base_url, no API key, no provider block.
-
-# Explicit because this box previously ran an API-key setup: when both an
-# API key and a ChatGPT session are present, this decides which wins. Also
-# the documented default, so it only ever reasserts the intended behavior.
-preferred_auth_method = "chatgpt"
+# Codex config — gateway-only. Run Codex through the ~/.local/bin/codex
+# launcher that scripts/setup-private-ai-gateway.sh creates: it uses its own
+# CODEX_HOME pointed at the private AI gateway and the user's
+# ~/.config/private-ai-gateway/client.key. This shared ~/.codex config is for
+# the vendor binary run directly, and deliberately fails closed: it names a
+# provider it never defines and points the built-in OpenAI and ChatGPT
+# endpoints at a closed local port, so neither a ChatGPT session nor an
+# OpenAI API key can be used from here.
+model_provider = "private_gateway"
+forced_login_method = "api"
+openai_base_url = "http://127.0.0.1:9/v1"
+chatgpt_base_url = "http://127.0.0.1:9/"
+check_for_update_on_startup = false
 
 model_reasoning_summary = "detailed"
 

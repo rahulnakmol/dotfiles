@@ -24,8 +24,6 @@ gh/.config/gh/hosts.yml
 **/*token*
 
 # Codex — ignore everything except config and the tracked per-profile files
-# (azure.config.toml is written per-machine by setup-model-provider.sh
-# directly into ~/.codex/, never through stow, so it never lands here)
 codex/.codex/*
 !codex/.codex/config.toml
 !codex/.codex/code.config.toml
@@ -71,10 +69,7 @@ cursor/.cursor/agent-cli-state.json
 cursor/.cursor/statsig-cache.json
 cursor/.cursor/.cursorignore
 
-# OpenCode — configs only; agents/workflows/skills/plugins + npm install via
-# bootstrap. update-models.sh is NOT ignored here (unlike the macOS repo) —
-# it's a real, tracked script in this repo (the ocum/ocumd aliases and
-# README both reference it), not bootstrap-generated output.
+# OpenCode — configs only; agents/workflows/skills/plugins + npm install via bootstrap.
 opencode/.config/opencode/agents/
 opencode/.config/opencode/commands/
 opencode/.config/opencode/workflows/

@@ -1,7 +1,7 @@
 # codex
 
-OpenAI Codex CLI configuration, running on the **ChatGPT Pro plan** — no Azure, no API key, no
-provider endpoint.
+OpenAI Codex CLI configuration. Codex runs only through the private AI gateway — no ChatGPT plan,
+no OpenAI API key, no other provider.
 
 ## Private AI gateway
 
@@ -10,6 +10,12 @@ one user-specific key under `~/.config/private-ai-gateway/` (mode 0600), writes 
 configuration there, and creates `~/.local/bin/codex` as the gateway-backed command. The same
 protected key is used by that user's Claude Code and OpenCode launchers; keys are never shared
 between OS users or committed here.
+
+**Gateway-only.** The private AI gateway is the only model route. The launcher
+refuses to start without the user's `~/.config/private-ai-gateway/client.key` (mode 0600), refuses
+subscription and account login subcommands, and strips provider overrides, so nothing falls back
+to a vendor endpoint or a cached session. The shared stowed config also fails closed when the
+vendor binary is run directly.
 
 ## Key Files
 
@@ -25,33 +31,34 @@ the real, currently-published codex-cli: `--profile <name>` layers
 
 ## Authentication
 
-```bash
-codex login   # choose "Sign in with ChatGPT"
-```
+Only the gateway key. The generated `~/.config/private-ai-gateway/codex/config.toml` sets
+`model_provider = "private_gateway"` with an auth command that reads `client.key`,
+`forced_login_method = "api"`, and points `openai_base_url` and `chatgpt_base_url` at the gateway
+too, so even a built-in provider cannot reach `api.openai.com` or `chatgpt.com`. The launcher
+refuses `codex login`, `codex logout`, `codex cloud`, `--oss`, `--profile`, and `-c` overrides of
+provider, endpoint, or login keys.
 
-`preferred_auth_method = "chatgpt"` — the documented default, set explicitly because a machine
-that previously used an API key would otherwise have that take precedence when both are present.
-
-Guided, either mode: `./scripts/setup-model-provider.sh --codex-chatgpt` runs `codex login` for
-you — the script itself never sees the OAuth credential, the same way `claude setup-token` keeps
-its own browser flow self-contained. See "Alternative: Azure AI Foundry" below for the other mode.
+The stowed `~/.codex/config.toml` is only read when the vendor binary runs directly. It names the
+undefined `private_gateway` provider and points the built-in endpoints at a closed local port, so
+that path fails instead of using a ChatGPT session or an API key.
 
 ## Defaults
 
 | Setting | Value |
 |---------|-------|
-| Model | `gpt-5.1-codex-max` |
-| Review model | `gpt-5.1-codex-max` |
+| Model | gateway default from `~/.config/private-ai-gateway/default-model` |
 | Sandbox mode | workspace-write |
 | Approval policy | on-request |
 | `sandbox_workspace_write.network_access` | `false` |
 | `[shell_environment_policy].exclude` | generated from `agent-policy/catalog.json` |
 
-Model IDs are Codex's own documented default at time of writing, not verified against a live
-account — confirm after signing in with `codex --profile <name> exec "reply OK"` per profile, since
-plan entitlement decides what's actually reachable.
+The model must be one the gateway advertises at `/v1/models`; the setup script checks this.
 
 ## Profiles — mirroring Claude and OpenCode
+
+These profile files apply only to the stowed `~/.codex`, which fails closed. The gateway launcher
+uses its own `CODEX_HOME` and refuses `--profile`, so run the gateway with `-m`, `-s`, and `-a`
+instead.
 
 | Profile | Mirrors | Sandbox | Approval | Reasoning |
 |---------|---------|---------|----------|-----------|
@@ -80,33 +87,6 @@ table and never actually loaded.
 | sequential-thinking | npx (`@modelcontextprotocol/server-sequential-thinking`) |
 | github | URL, `bearer_token_env_var = "GITHUB_PAT"` |
 | azure | npx (`@azure/mcp@latest`) — manages Azure *resources* via the `az`/`azd` aliases; unrelated to the model provider above |
-
-## Alternative: Azure AI Foundry
-
-ChatGPT Pro auth is the default and stays untouched by this. To add an Azure AI Foundry endpoint
-as an **additional**, opt-in profile — the `code`/`codex`/`plan`/`review`/`quick` profiles keep
-using ChatGPT auth either way:
-
-```bash
-./scripts/setup-model-provider.sh --codex-azure --resource-name=my-resource --deployment=gpt-5
-codex --profile azure exec "reply OK"   # use it
-```
-
-This writes a marker-guarded `[model_providers.azure]` block into `~/.codex/config.toml`, and the
-profile itself into a dedicated `~/.codex/azure.config.toml` — never into anything this repo
-tracks. The key itself is never written to either file: only `env_key = "AZURE_OPENAI_API_KEY"`,
-the variable *name*, following Codex's own documented mechanism for keeping secrets out of config.
-The script resolves the actual key from an already-exported `AZURE_OPENAI_API_KEY`, a 1Password
-read, or a hidden prompt — never a CLI flag — and, if it has to ask, persists it only to
-`~/.zshrc.local` (gitignored, per-machine). Re-running the command is safe: both files are replaced
-in place, not duplicated, and a pre-existing *unmanaged* `[model_providers.azure]` block or
-`azure.config.toml` is left alone with an explanatory error rather than corrupted.
-`./scripts/setup-model-provider.sh --status` reports what's configured without ever printing the
-key. See `scripts/setup-model-provider.sh --help` for the full safety rationale.
-
-All of this — the per-profile-file mechanism above, the deprecated `approval_policy` value, and
-this Azure flow — was verified by installing the real, currently-published `codex-cli` in a sandbox
-and running it against the generated config, not just checked for valid TOML syntax.
 
 ## Project trust
 

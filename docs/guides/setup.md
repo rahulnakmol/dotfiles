@@ -158,24 +158,12 @@ Cursor CLI is not included: its API key and endpoint settings authenticate to Cu
 agent backend, not to an arbitrary OpenAI-compatible provider. Never reuse the private gateway key
 as `CURSOR_API_KEY`. See [the Cursor module documentation](../modules/cursor.md#private-ai-gateway).
 
-### Alternative Codex / OpenCode providers
+### Gateway-only policy
 
-Codex defaults to your ChatGPT plan and OpenCode to its Zen provider — nothing to do for either.
-If you also want an Azure AI Foundry endpoint available (additive, not a replacement), or want a
-guided, scripted `codex login`:
-
-```bash
-./scripts/setup-model-provider.sh --codex-chatgpt     # guided `codex login`
-./scripts/setup-model-provider.sh --codex-azure --resource-name=NAME --deployment=NAME
-./scripts/setup-model-provider.sh --opencode-azure --resource-name=NAME --deployment=NAME
-./scripts/setup-model-provider.sh --status            # what's configured, no secrets shown
-```
-
-No `--api-key` flag — it resolves the key from an already-exported env var, 1Password, or a hidden
-prompt, and never writes it into a tracked file. See
-[docs/modules/codex.md](../modules/codex.md#alternative-azure-ai-foundry) and
-[docs/modules/opencode.md](../modules/opencode.md#alternative-azure-ai-foundry) for what each mode
-writes and why.
+There is no alternative provider: Claude Code, Codex, and OpenCode use only the private AI
+gateway, through the launchers above. They refuse to run without the key file and refuse
+subscription or account login (`claude auth`, `codex login`, `opencode auth`). The stowed vendor
+configs fail closed when a vendor binary is run directly.
 
 ### GitHub CLI
 

@@ -56,7 +56,7 @@ Full list with per-distro install commands: [docs/guides/dependencies.md](docs/g
 | `1password` | SSH agent, security settings, compact UI | [details](docs/modules/1password.md) |
 | `claude` | Settings, 41 plugins, custom statusline, CLAUDE.md + 10 path-scoped rules | [details](docs/modules/claude.md) |
 | `cursor` | 14 path-scoped rules mirroring Claude's | [details](docs/modules/cursor.md) |
-| `codex` | 5 profiles on the ChatGPT Pro plan, mirroring Claude/OpenCode | [details](docs/modules/codex.md) |
+| `codex` | Gateway-only Codex config, mirroring Claude/OpenCode | [details](docs/modules/codex.md) |
 | `opencode` | OpenCode with pro/quick/ui agents, model auto-updater | [details](docs/modules/opencode.md) |
 
 Users can route the ordinary `claude`, `codex`, and `opencode` commands through a private AI
@@ -76,7 +76,7 @@ Aliases follow a **prefix convention** so they're predictable:
 | `t` | Tmux | `ta` attach, `tl` list, `tn` new session |
 | `d` | Docker/Podman | `dps` ps, `dex` exec, `dcu` compose up |
 | `cc` | Claude Code | `cc` interactive, `cco` opus, `ccs` sonnet |
-| `oc` | OpenCode | `oc` launch, `ocum` update models |
+| `oc` | OpenCode | `oc` launch |
 | `s` | SSH | `s` connect, `snew` gen key, `spub` show pubkey |
 | `a` | APT (Ubuntu) | `ai` install, `as` search, `aup` upgrade |
 | `dn` | DNF (Fedora) | `dni` install, `dns` search, `dnup` upgrade |

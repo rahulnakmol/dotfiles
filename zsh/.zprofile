@@ -20,3 +20,9 @@ if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
 elif [[ -x /opt/homebrew/bin/brew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
+
+# Homebrew prepends its bin directory. Keep user-owned launchers first so
+# machine-local wrappers (private gateway clients) also win in login shells
+# that never read .zshrc, such as `zsh -lc` from services and agents.
+typeset -U PATH
+PATH="$HOME/.local/bin:$PATH"

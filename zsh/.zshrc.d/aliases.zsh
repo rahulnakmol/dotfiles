@@ -222,15 +222,11 @@ alias oc='opencode'                                                             
 alias occ='opencode -c'                                                                                                  # Continue last session
 alias ocr='opencode run'                                                                                                 # Headless run (non-interactive)
 alias ocrc='opencode run -c'                                                                                             # Continue last session headless
-alias ocm='opencode -m'                                                                                                  # Launch with specific model
-alias ocw='opencode web'                                                                                                 # Open web interface
-alias ocpr='opencode pr'                                                                                                 # Checkout and review a GitHub PR
 alias ocsl='opencode session list'                                                                                       # List sessions
-alias ocse='opencode export'                                                                                             # Export session as JSON
-alias ocsi='opencode import'                                                                                             # Import session from JSON or share URL
+alias ocse='opencode session export'                                                                                             # Export session as JSON
+alias ocsi='opencode session import'                                                                                             # Import session from JSON or share URL
 alias ocml='opencode models'                                                                                             # List available models
 alias ocst='opencode stats'                                                                                              # Show usage statistics
-alias ocp='opencode --pure'                                                                              # Launch without plugins
 
 # Aliases for fzf
 alias fzp="fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}' --preview-window=right:70%"

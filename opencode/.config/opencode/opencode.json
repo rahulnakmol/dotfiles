@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "autoupdate": false,
+  "update": "disable",
   "enabled_providers": [
     "private_gateway"
   ],

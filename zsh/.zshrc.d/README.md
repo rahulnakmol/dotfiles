@@ -341,16 +341,11 @@ Podman is used as a drop-in replacement for Docker. `docker` itself is aliased t
 | `occ` | `opencode -c` | Continue last session |
 | `ocr` | `opencode run` | Headless run |
 | `ocrc` | `opencode run -c` | Continue session headless |
-| `ocm` | `opencode -m` | Use specific model |
-| `ocw` | `opencode web` | Open web interface |
-| `ocpr` | `opencode pr` | Review GitHub PR |
 | `ocsl` | `opencode session list` | List sessions |
-| `ocse` | `opencode export` | Export session JSON |
-| `ocsi` | `opencode import` | Import session |
+| `ocse` | `opencode session export` | Export session JSON |
+| `ocsi` | `opencode session import` | Import session |
 | `ocml` | `opencode models` | List models |
-| `ocli` | `opencode providers login` | Login to provider |
 | `ocst` | `opencode stats` | Usage statistics |
-| `ocp` | `opencode --pure` | Launch without plugins |
 
 ## Editor & Utilities
 
@@ -380,7 +375,7 @@ All aliases follow a consistent prefix pattern for discoverability:
 | `g` | Git | `gs`, `ga`, `gp` |
 | `gh` | GitHub CLI | `ghl`, `gpc`, `gprs` |
 | `n` | npm | `ni`, `nr`, `nb` |
-| `oc` | OpenCode | `occ`, `ocr`, `ocpr` |
+| `oc` | OpenCode | `occ`, `ocr`, `ocsl` |
 | `s` | SSH | `sa`, `sc`, `sh` |
 | `t` | Tmux | `ta`, `tn`, `tks` |
 | `zy` | Zypper | `zyi`, `zyug`, `zyuu` |

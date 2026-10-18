@@ -89,6 +89,7 @@ fi
 claude_bin="$(find_vendor_binary claude)" || { echo "Claude Code CLI not found" >&2; exit 1; }
 codex_bin="$(find_vendor_binary codex)" || { echo "Codex CLI not found" >&2; exit 1; }
 opencode_bin="$(find_vendor_binary opencode)" || { echo "OpenCode CLI not found" >&2; exit 1; }
+jq_bin="$(command -v jq)" || { echo "jq not found" >&2; exit 1; }
 
 install -d -m 0700 "$CONFIG_DIR" "$CODEX_HOME" "$CLAUDE_HOME" "$BIN_DIR"
 umask 077
@@ -206,9 +207,12 @@ timeout_ms = 5000
 refresh_interval_ms = 300000
 EOF
 
-# ── OpenCode: only the gateway provider is enabled. The wrapper passes this
-# file as inline config (highest precedence), so project configs cannot
-# redirect the provider or enable another one.
+# ── OpenCode 2.0: the launcher passes this file as inline config
+# (OPENCODE_CONFIG_CONTENT), the highest user-writable layer, so a project
+# config cannot redirect the provider's endpoint or key. The provider
+# allowlist is not taken from this layer: OpenCode uses enabled_providers from
+# the global config, so the launcher requires the stowed global config to
+# allow exactly private_gateway.
 jq -n \
   --arg base "$gateway_url/v1" \
   --arg key_file "$KEY_FILE" \
@@ -217,8 +221,6 @@ jq -n \
   --argjson models "$provider_models" \
   '{
     "$schema":"https://opencode.ai/config.json",
-    enabled_providers:["private_gateway"],
-    autoupdate:false,
     share:"disabled",
     provider:{private_gateway:{
       npm:"@ai-sdk/openai-compatible",
@@ -316,13 +318,16 @@ exec $(printf '%q' "$codex_bin") "\$@"
 EOF
 
 write_gateway_wrapper "$BIN_DIR/opencode" "OpenCode" <<EOF
-case "\${1:-}" in
-  auth|providers) refuse "'opencode \$1' (provider credentials) is disabled" ;;
-esac
-unset OPENCODE_CONFIG_DIR OPENCODE_CLI_CONFIG_CONTENT OPENCODE_MODELS_URL OPENCODE_MODELS_PATH
-export OPENCODE_CONFIG=$(printf '%q' "$OPENCODE_CONFIG")
-OPENCODE_CONFIG_CONTENT=\$(<"\$OPENCODE_CONFIG")
-# No models.dev/api.opencode.ai catalog fetch: the gateway catalog is inline.
+[[ \${1:-} == auth ]] && refuse "'opencode auth' (provider credentials) is disabled"
+global_config=\${XDG_CONFIG_HOME:-\$HOME/.config}/opencode/opencode.json
+if ! $(printf '%q' "$jq_bin") -e '.enabled_providers == ["private_gateway"]' "\$global_config" >/dev/null 2>&1; then
+  echo "\${0##*/}: \$global_config must set enabled_providers to exactly [\"private_gateway\"] (stow the opencode module); refusing to run." >&2
+  exit 78
+fi
+# OPENCODE_CONFIG_DIR replaces the global config, including that allowlist.
+unset OPENCODE_CONFIG_DIR
+OPENCODE_CONFIG_CONTENT=\$(<$(printf '%q' "$OPENCODE_CONFIG"))
+# The gateway catalog is inline, so skip the models.dev/api.opencode.ai fetch.
 export OPENCODE_CONFIG_CONTENT OPENCODE_DISABLE_AUTOUPDATE=1 OPENCODE_DISABLE_MODELS_FETCH=1
 exec $(printf '%q' "$opencode_bin") "\$@"
 EOF
@@ -335,6 +340,16 @@ rm -f \
 if command -v herdr >/dev/null 2>&1; then
   CLAUDE_CONFIG_DIR="$CLAUDE_HOME" herdr integration install claude >/dev/null
 fi
+
+# OpenCode's background service listens on one fixed default port, so a second
+# OS user's service could not start. Give each user its own port, kept in the
+# local, git-ignored ~/.config/opencode/service.json. The running service keeps
+# the config it started with, so stop it; the next command restarts it through
+# the launcher with the new inline config.
+if ! "$opencode_bin" service get 2>/dev/null | jq -e '.port' >/dev/null; then
+  "$opencode_bin" service set port "$((49384 + $(id -u) % 1000))" >/dev/null
+fi
+"$BIN_DIR/opencode" service stop >/dev/null 2>&1 || true
 
 echo "Configured Claude Code, Codex, and OpenCode to use only $gateway_url for $USER_NAME."
 echo "OpenCode catalog: $model_count gateway models."

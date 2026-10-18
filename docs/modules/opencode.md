@@ -12,12 +12,28 @@ user's Claude Code and Codex launchers; keys are never shared between OS users o
 The setup reads the authenticated gateway `/v1/models` endpoint on every run, so `opencode models
 private_gateway` shows the full current gateway catalog rather than a hardcoded subset.
 
-**Gateway-only.** The private AI gateway is the only model route. The launcher
-refuses to start without the user's `~/.config/private-ai-gateway/client.key` (mode 0600) and
-refuses `opencode auth`. It passes the gateway config inline, the highest-precedence layer, so a
-project `opencode.json` cannot re-enable another provider or redirect the gateway one, and it
-turns off the models.dev catalog fetch. The shared stowed config also fails closed when the vendor
-binary is run directly.
+**Gateway-only.** The private AI gateway is the only model route. The launcher refuses to start
+without the user's `~/.config/private-ai-gateway/client.key` (mode 0600) and refuses
+`opencode auth`. OpenCode 2.0 splits the enforcement across two layers, and the launcher relies on
+both:
+
+- **Allowlist.** OpenCode takes `enabled_providers` from the global config and ignores it in later
+  layers, so the stowed `~/.config/opencode/opencode.json` (exactly `["private_gateway"]`) is what
+  keeps project configs from enabling other providers. The launcher refuses to run if that file is
+  missing or allows anything else, and unsets `OPENCODE_CONFIG_DIR`, which would replace it.
+- **Endpoint and key.** The generated gateway config is passed inline (`OPENCODE_CONFIG_CONTENT`),
+  the highest user layer, so a project config cannot redirect `private_gateway` or swap its key.
+
+The launcher also turns off the models.dev catalog fetch and update checks. The vendor binary run
+without the launcher has no usable provider.
+
+### Background service
+
+OpenCode 2.0 runs commands through a per-user background service (`opencode service status`). It
+keeps the config it started with, so setup stops it and the next command restarts it through the
+launcher. The default port is shared by every OS user, so setup gives each user its own port
+(49384 + UID mod 1000) when none is set. The port and the service password live in
+`~/.config/opencode/service.json`, which is git-ignored; never commit it.
 
 ## Key Files
 

@@ -65,10 +65,8 @@ Lowercase = safer (per-action classifier); uppercase = autopilot.
 | `/` | One-shot run prompt |
 | `s` | Split with default model |
 | `w` | New window |
-| `p` | Popup with Opus |
-| `c` | Popup with GPT Codex |
-| `u` | Popup with Gemini Pro |
-| `q` | Popup with MiniMax |
+
+Switch between the `pro`, `ui`, and `quick` agents with Tab inside OpenCode.
 
 ## Theme
 

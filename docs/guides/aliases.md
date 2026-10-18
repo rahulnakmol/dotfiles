@@ -243,15 +243,11 @@ All `docker` commands are aliased to `podman` as a drop-in replacement (`docker-
 | `occ` | `opencode -c` | Continue last session |
 | `ocr` | `opencode run` | Headless non-interactive run |
 | `ocrc` | `opencode run -c` | Continue last session headless |
-| `ocm` | `opencode -m` | Launch with specific model |
-| `ocw` | `opencode web` | Open web interface |
-| `ocpr` | `opencode pr` | Checkout and review a GitHub PR |
 | `ocsl` | `opencode session list` | List sessions |
-| `ocse` | `opencode export` | Export session as JSON |
-| `ocsi` | `opencode import` | Import session from JSON or share URL |
+| `ocse` | `opencode session export` | Export session as JSON |
+| `ocsi` | `opencode session import` | Import session from JSON or share URL |
 | `ocml` | `opencode models` | List available models |
 | `ocst` | `opencode stats` | Show usage statistics |
-| `ocp` | `opencode --pure` | Launch without plugins |
 
 ## Editors
 

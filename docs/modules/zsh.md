@@ -61,7 +61,7 @@ that satisfy `compaudit` instead of trusting a third-user-owned shared completio
 ## Notable Alias Groups
 
 - **Claude Code**: `cc`, `ccs` (sonnet), `cco` (opus), `cch` (haiku), `ccpl` (plan), `cc!`/`cco!` (autopilot)
-- **OpenCode**: `oc`, `occ`, `ocr`, `ocm`
+- **OpenCode**: `oc`, `occ`, `ocr`, `ocsl`
 - **Containers**: `docker` aliased to `podman`; full compose support via `dc`, `dcu`, `dcd`
 - **Navigation**: `eza` replaces `ls`; `bat` replaces `cat`; `zoxide` replaces `cd`
 

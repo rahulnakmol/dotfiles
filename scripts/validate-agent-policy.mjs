@@ -249,6 +249,8 @@ function checkGatewayOnly() {
   const enabled = JSON.stringify(oc.enabled_providers || []);
   if (enabled === '["private_gateway"]') ok("gateway", "opencode enables only private_gateway");
   else fail("gateway", "opencode enabled_providers must be exactly [\"private_gateway\"]", enabled);
+  if ("autoupdate" in oc) fail("gateway", "opencode uses the deprecated autoupdate key; OpenCode 2.0 uses update");
+  else ok("gateway", "opencode has no deprecated autoupdate key");
   const ocModels = JSON.stringify([oc.model, oc.small_model, ...Object.values(oc.agent || {}).map((a) => a.model)]);
   if (/"(?!private_gateway\/)[^"/]+\//.test(ocModels)) fail("gateway", "opencode references a non-gateway provider model", ocModels);
   else ok("gateway", "opencode references no non-gateway provider model");

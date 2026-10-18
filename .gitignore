@@ -82,6 +82,8 @@ opencode/.config/opencode/package.json
 opencode/.config/opencode/package-lock.json
 opencode/.config/opencode/bun.lock
 opencode/.config/opencode/*.bak
+# `opencode service set` writes the background service password and port here.
+opencode/.config/opencode/service.json
 
 # Skills bootstrap — installed via scripts/bootstrap-skills.sh, not vendored
 .agents/

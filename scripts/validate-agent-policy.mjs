@@ -251,7 +251,12 @@ function checkGatewayOnly() {
   else fail("gateway", "opencode enabled_providers must be exactly [\"private_gateway\"]", enabled);
   if ("autoupdate" in oc) fail("gateway", "opencode uses the deprecated autoupdate key; OpenCode 2.0 uses update");
   else ok("gateway", "opencode has no deprecated autoupdate key");
-  const ocModels = JSON.stringify([oc.model, oc.small_model, ...Object.values(oc.agent || {}).map((a) => a.model)]);
+  const ocModels = JSON.stringify([oc.model, oc.small_model, ...Object.values({ ...(oc.agent || {}), ...(oc.agents || {}) }).map((a) => a.model)]);
+  const ui = { "ui-balanced": "private_gateway/gemini-4-argon#high", "ui-intelligence": "private_gateway/claude-fable-5-1#medium" };
+  for (const [name, model] of Object.entries(ui)) {
+    if (oc.agents?.[name]?.model === model) ok("gateway", `opencode agent ${name} routes to ${model}`);
+    else fail("gateway", `opencode agent ${name} must use ${model}`, oc.agents?.[name]?.model);
+  }
   if (/"(?!private_gateway\/)[^"/]+\//.test(ocModels)) fail("gateway", "opencode references a non-gateway provider model", ocModels);
   else ok("gateway", "opencode references no non-gateway provider model");
 

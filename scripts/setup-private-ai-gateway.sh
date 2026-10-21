@@ -329,6 +329,24 @@ unset OPENCODE_CONFIG_DIR
 OPENCODE_CONFIG_CONTENT=\$(<$(printf '%q' "$OPENCODE_CONFIG"))
 # The gateway catalog is inline, so skip the models.dev/api.opencode.ai fetch.
 export OPENCODE_CONFIG_CONTENT OPENCODE_DISABLE_AUTOUPDATE=1 OPENCODE_DISABLE_MODELS_FETCH=1
+# OpenCode 2.0.30 ignores an agent's configured model for \`run --agent NAME\`
+# (anomalyco/opencode#42561) and uses the default model. Pass the agent's
+# model and variant explicitly unless the command already chooses one.
+if [[ \${1:-} == run ]]; then
+  agent="" model_set=0 prev=""
+  for arg in "\$@"; do
+    [[ \$prev == --agent ]] && agent=\$arg
+    case \$arg in
+      -m|--model|--model=*|-m?*) model_set=1 ;;
+      --agent=*) agent=\${arg#--agent=} ;;
+    esac
+    prev=\$arg
+  done
+  if [[ -n \$agent && \$model_set == 0 ]]; then
+    agent_model=\$($(printf '%q' "$jq_bin") -r --arg a "\$agent" '.agents[\$a].model // empty' "\$global_config")
+    [[ -n \$agent_model ]] && set -- run --model "\$agent_model" "\${@:2}"
+  fi
+fi
 exec $(printf '%q' "$opencode_bin") "\$@"
 EOF
 

@@ -4,21 +4,28 @@
   "enabled_providers": [
     "private_gateway"
   ],
-  "agent": {
+  "agents": {
     "quick": {
       "description": "Fast, concise answers through the private AI gateway",
       "mode": "primary",
-      "prompt": "You are a fast, concise coding assistant. Keep responses short and actionable. Prioritize speed over exhaustive detail."
+      "system": "You are a fast, concise coding assistant. Keep responses short and actionable. Prioritize speed over exhaustive detail."
     },
     "pro": {
       "description": "Expert coding agent for complex architecture, debugging, and deep code analysis",
       "mode": "primary",
-      "prompt": "You are an expert software engineer. Think deeply before acting. Use extended reasoning for complex problems. Focus on correctness, edge cases, and production-quality code. When debugging, be methodical and trace through the full execution path."
+      "system": "You are an expert software engineer. Think deeply before acting. Use extended reasoning for complex problems. Focus on correctness, edge cases, and production-quality code. When debugging, be methodical and trace through the full execution path."
     },
-    "ui": {
-      "description": "UI/UX focused agent for frontend, design systems, layout, and visual work",
+    "ui-balanced": {
+      "description": "UI/UX work, balanced mode: Gemini 4 Argon (high)",
       "mode": "primary",
-      "prompt": "You are a frontend and UI/UX specialist. Focus on component architecture, responsive design, accessibility, and visual polish. Leverage your multimodal capabilities to understand design references, screenshots, and mockups. Prefer modern patterns: CSS Grid/Flexbox, design tokens, component composition."
+      "model": "private_gateway/gemini-4-argon#high",
+      "system": "You are a frontend and UI/UX specialist. Focus on component architecture, responsive design, accessibility, and visual polish. Leverage your multimodal capabilities to understand design references, screenshots, and mockups. Prefer modern patterns: CSS Grid/Flexbox, design tokens, component composition."
+    },
+    "ui-intelligence": {
+      "description": "UI/UX work, intelligence mode: Claude Fable 5.1 at medium reasoning effort",
+      "mode": "primary",
+      "model": "private_gateway/claude-fable-5-1#medium",
+      "system": "You are a frontend and UI/UX specialist. Focus on component architecture, responsive design, accessibility, and visual polish. Leverage your multimodal capabilities to understand design references, screenshots, and mockups. Prefer modern patterns: CSS Grid/Flexbox, design tokens, component composition."
     }
   },
   "permission": {

@@ -49,13 +49,21 @@ run without the launcher has no usable provider. The launcher's generated config
 provider from the live gateway catalog and sets the default model chosen during setup. The
 built-in `opencode` (Zen) provider and any credentials in `opencode auth` are never enabled.
 
-| Agent | Purpose |
-|-------|---------|
-| `quick` | Fast, concise answers |
-| `pro` | Complex architecture, debugging, deep analysis |
-| `ui` | Frontend/UI work |
+| Agent | Purpose | Model |
+|-------|---------|-------|
+| `quick` | Fast, concise answers | gateway default |
+| `pro` | Complex architecture, debugging, deep analysis | gateway default |
+| `ui-balanced` | Frontend/UI work, balanced mode | `private_gateway/gemini-4-argon#high` (Gemini 4 Argon, high reasoning effort) |
+| `ui-intelligence` | Frontend/UI work, intelligence mode | `private_gateway/claude-fable-5-1#medium` (Claude Fable 5.1, medium reasoning effort) |
 
-Each agent has a custom system prompt tailored to its role and uses the gateway default model.
+Each agent has a custom system prompt tailored to its role. The `#variant` suffix is sent to the
+gateway as `reasoning_effort`; the gateway accepts `low`, `medium`, `high`, `xhigh` and `max`.
+
+OpenCode 2.0.30 ignores an agent's model in `opencode run --agent NAME` (anomalyco/opencode#42561)
+and falls back to the default model. The launcher therefore adds `--model` from the agent's entry
+in the global config unless the command already passes `-m`/`--model`.
+
+Use `opencode --agent ui-balanced` or `opencode run --agent ui-intelligence '...'` to pick a mode.
 
 ## TUI Settings
 
